@@ -7,9 +7,9 @@ const GlobalStyles = () => (
       
       body {
         margin: 0;
-        background-color: #0f172a;
+        background-color: #000000;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        color: #f1f5f9;
+        color: #ededed;
         font-size: 14px;
         line-height: 1.5;
         overflow-x: hidden;
@@ -23,21 +23,21 @@ const GlobalStyles = () => (
         font-size: 28px;
         font-weight: 700;
         margin: 0;
-        color: #f1f5f9;
+        color: #ededed;
       }
       
       h2 {
         font-size: 18px;
         font-weight: 600;
         margin: 0 0 16px 0;
-        color: #f1f5f9;
+        color: #ededed;
       }
 
       h3 {
         font-size: 16px;
         font-weight: 600;
         margin: 0 0 12px 0;
-        color: #f1f5f9;
+        color: #ededed;
       }
       
       .label {
@@ -45,35 +45,35 @@ const GlobalStyles = () => (
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-weight: 600;
-        color: #94a3b8;
+        color: #888888;
         display: block;
         margin-bottom: 6px;
       }
       
       .card {
-        background-color: #1e293b;
-        border: 1px solid #334155;
+        background-color: #111111;
+        border: 1px solid #333333;
         border-radius: 8px;
         padding: 24px;
       }
       
       .result-card {
-        background-color: #1e293b;
-        border: 1px solid #334155;
-        border-left: 4px solid #3b82f6;
+        background-color: #111111;
+        border: 1px solid #333333;
+        border-left: 4px solid #0070f3;
         border-radius: 6px;
         padding: 20px;
         margin-bottom: 16px;
       }
       
-      .result-card.success { border-left-color: #22c55e; }
+      .result-card.success { border-left-color: #10b981; }
       .result-card.emergency { border-left-color: #ef4444; }
-      .result-card.muted { border-left-color: #94a3b8; }
+      .result-card.muted { border-left-color: #888888; }
       
       .input-field {
-        background-color: #0f172a;
-        border: 1px solid #334155;
-        color: #f1f5f9;
+        background-color: #000000;
+        border: 1px solid #333333;
+        color: #ededed;
         border-radius: 6px;
         padding: 10px 12px;
         outline: none;
@@ -84,8 +84,8 @@ const GlobalStyles = () => (
       }
       
       .input-field:focus {
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 1px #3b82f6;
+        border-color: #0070f3;
+        box-shadow: 0 0 0 1px #0070f3;
       }
       
       .checkbox-container {
@@ -94,20 +94,20 @@ const GlobalStyles = () => (
         gap: 8px;
         cursor: pointer;
         font-size: 14px;
-        color: #f1f5f9;
+        color: #ededed;
         user-select: none;
       }
       
       .checkbox-input {
-        accent-color: #3b82f6;
+        accent-color: #0070f3;
         width: 16px;
         height: 16px;
         margin: 0;
       }
       
       .btn-primary {
-        background-color: #3b82f6;
-        color: #ffffff;
+        background-color: #ededed;
+        color: #000000;
         border: none;
         border-radius: 6px;
         padding: 12px 16px;
@@ -123,26 +123,26 @@ const GlobalStyles = () => (
       }
       
       .btn-primary:hover:not(:disabled) {
-        background-color: #2563eb;
+        background-color: #ffffff;
       }
       
       .btn-primary:active:not(:disabled) {
-        background-color: #1d4ed8;
+        background-color: #d4d4d4;
       }
       
       .btn-primary:disabled {
-        background-color: #334155;
-        color: #94a3b8;
+        background-color: #333333;
+        color: #888888;
         cursor: not-allowed;
       }
 
       .top-banner {
-        background-color: #1e293b;
-        border-bottom: 1px solid #334155;
+        background-color: #111111;
+        border-bottom: 1px solid #333333;
         padding: 8px;
         text-align: center;
         font-size: 13px;
-        color: #94a3b8;
+        color: #888888;
         font-weight: 500;
       }
       
@@ -160,9 +160,9 @@ const GlobalStyles = () => (
       .spinner {
         width: 18px;
         height: 18px;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        border: 2px solid rgba(0, 0, 0, 0.3);
         border-radius: 50%;
-        border-top-color: #ffffff;
+        border-top-color: #000000;
         animation: spin 1s linear infinite;
       }
       
@@ -171,9 +171,9 @@ const GlobalStyles = () => (
       }
       
       ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #0f172a; }
-      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-      ::-webkit-scrollbar-thumb:hover { background: #475569; }
+      ::-webkit-scrollbar-track { background: #000000; }
+      ::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #444444; }
       
       .progress-container {
         display: flex;
@@ -199,7 +199,7 @@ const GlobalStyles = () => (
 );
 
 const CrossIcon = () => (
-  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#334155" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M12 2v20M2 12h20" />
   </svg>
 );
@@ -213,13 +213,13 @@ const AlertIcon = () => (
 );
 
 const CheckIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12"></polyline>
   </svg>
 );
 
 const FileTextIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
     <polyline points="14 2 14 8 20 8"></polyline>
     <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -229,13 +229,13 @@ const FileTextIcon = () => (
 );
 
 const CircleIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#334155" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"></circle>
   </svg>
 );
 
 const LoaderIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ededed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: 'spin 1s linear infinite' }}>
     <line x1="12" y1="2" x2="12" y2="6"></line>
     <line x1="12" y1="18" x2="12" y2="22"></line>
     <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
@@ -354,10 +354,10 @@ export default function App() {
           🏥 Built for Microsoft Agents League Hackathon 2026
         </div>
         
-        <header style={{ padding: '24px 32px', borderBottom: '1px solid #334155', backgroundColor: '#0f172a', position: 'sticky', top: 0, zIndex: 10 }}>
+        <header style={{ padding: '24px 32px', borderBottom: '1px solid #333333', backgroundColor: '#000000', position: 'sticky', top: 0, zIndex: 10 }}>
           <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
             <h1>MediGuide AI</h1>
-            <div style={{ color: '#94a3b8', fontSize: '14px', marginTop: '4px' }}>
+            <div style={{ color: '#888888', fontSize: '14px', marginTop: '4px' }}>
               Clinical Decision Support for Resource-Limited Settings
             </div>
           </div>
@@ -407,7 +407,7 @@ export default function App() {
 
                 <div>
                   <label className="label" style={{ marginBottom: '12px' }}>Available Facility Resources</label>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '16px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '6px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '16px', backgroundColor: '#000000', border: '1px solid #333333', borderRadius: '6px' }}>
                     <label className="checkbox-container">
                       <input type="checkbox" name="lab" checked={formData.resources.lab} onChange={handleCheckboxChange} className="checkbox-input" />
                       Basic Laboratory (CBC, CMP)
@@ -444,7 +444,7 @@ export default function App() {
           <section style={{ flex: 1, minHeight: '600px' }}>
             
             {status === 'idle' && (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#94a3b8' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#888888' }}>
                 <CrossIcon />
                 <div style={{ marginTop: '16px', fontSize: '16px', fontWeight: '500' }}>Select a patient case to begin</div>
                 <div style={{ fontSize: '14px', marginTop: '4px' }}>Fill out the patient form to generate a clinical assessment.</div>
@@ -454,7 +454,7 @@ export default function App() {
             {status === 'analyzing' && (
               <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <div style={{ width: '100%', maxWidth: '400px' }}>
-                  <h3 style={{ textAlign: 'center', marginBottom: '32px', color: '#f1f5f9' }}>Running Assessment Protocol</h3>
+                  <h3 style={{ textAlign: 'center', marginBottom: '32px', color: '#ededed' }}>Running Assessment Protocol</h3>
                   <div className="progress-container">
                     {analysisSteps.map((step, idx) => {
                       let Icon = CircleIcon;
@@ -468,7 +468,7 @@ export default function App() {
                           <div className="progress-icon">
                             <Icon />
                           </div>
-                          <div style={{ fontSize: '14px', color: isFuture ? '#94a3b8' : '#f1f5f9', fontWeight: idx === loadingStep ? '500' : '400' }}>
+                          <div style={{ fontSize: '14px', color: isFuture ? '#888888' : '#ededed', fontWeight: idx === loadingStep ? '500' : '400' }}>
                             {step}
                           </div>
                         </div>
@@ -487,7 +487,7 @@ export default function App() {
                     <div style={{ paddingTop: '2px' }}><AlertIcon /></div>
                     <div>
                       <div style={{ color: '#ef4444', fontWeight: '700', fontSize: '14px', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>EMERGENCY REFERRAL REQUIRED</div>
-                      <div style={{ color: '#f1f5f9', fontSize: '14px' }}>Patient symptoms indicate a critical condition requiring immediate escalation. Follow acute protocols.</div>
+                      <div style={{ color: '#ededed', fontSize: '14px' }}>Patient symptoms indicate a critical condition requiring immediate escalation. Follow acute protocols.</div>
                     </div>
                   </div>
                 )}
@@ -496,8 +496,8 @@ export default function App() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                     <h2 style={{ margin: 0 }}>Primary Assessment</h2>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '20px', fontWeight: '700', color: '#22c55e', lineHeight: 1 }}>{result.confidence}</div>
-                      <div style={{ fontSize: '12px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '4px', fontWeight: '600' }}>Confidence</div>
+                      <div style={{ fontSize: '20px', fontWeight: '700', color: '#10b981', lineHeight: 1 }}>{result.confidence}</div>
+                      <div style={{ fontSize: '12px', color: '#888888', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '4px', fontWeight: '600' }}>Confidence</div>
                     </div>
                   </div>
                   <div className="result-card success" style={{ marginBottom: 0, fontSize: '15px', fontWeight: '500' }}>
@@ -510,7 +510,7 @@ export default function App() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {result.treatments.map((step, idx) => (
                       <div key={idx} className="result-card" style={{ marginBottom: 0, display: 'flex', gap: '16px' }}>
-                        <div style={{ color: '#94a3b8', fontWeight: '600', width: '20px', flexShrink: 0 }}>{idx + 1}.</div>
+                        <div style={{ color: '#888888', fontWeight: '600', width: '20px', flexShrink: 0 }}>{idx + 1}.</div>
                         <div>{step}</div>
                       </div>
                     ))}
@@ -536,8 +536,8 @@ export default function App() {
                         <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                           <div style={{ marginTop: '2px' }}><FileTextIcon /></div>
                           <div>
-                            <div style={{ fontWeight: '500', color: '#e2e8f0', fontSize: '13px' }}>{c.id}</div>
-                            <div style={{ color: '#94a3b8', fontSize: '13px', marginTop: '2px' }}>{c.title}</div>
+                            <div style={{ fontWeight: '500', color: '#ededed', fontSize: '13px' }}>{c.id}</div>
+                            <div style={{ color: '#888888', fontSize: '13px', marginTop: '2px' }}>{c.title}</div>
                           </div>
                         </div>
                       ))}
