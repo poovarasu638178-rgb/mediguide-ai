@@ -310,7 +310,7 @@ export default function App() {
     setError(null);
 
     try {
-      const res = await fetch('http://localhost:8000/api/diagnose', {
+      const res = await fetch('https://literate-space-giggle-g4vq4v4xp7xrfp74r-8000.app.github.dev/api/diagnose', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
