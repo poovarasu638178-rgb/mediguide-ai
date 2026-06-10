@@ -261,9 +261,10 @@ export default function App() {
     }
   });
 
-  const [status, setStatus] = useState('idle'); // idle, analyzing, success
+  const [status, setStatus] = useState('idle'); // idle, analyzing, success, error
   const [loadingStep, setLoadingStep] = useState(0);
   const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
   const analysisSteps = [
     "Validating patient demographics",
@@ -299,50 +300,34 @@ export default function App() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.symptoms) return;
 
     setStatus('analyzing');
     setLoadingStep(0);
     setResult(null);
+    setError(null);
 
-    setTimeout(() => {
-      setStatus('success');
-      
-      const isEmergency = formData.symptoms.toLowerCase().match(/(chest pain|shortness of breath|bleeding|stroke|unconscious|seizure)/i);
-
-      setResult({
-        isEmergency: !!isEmergency,
-        reasoning: [
-          "Patient presentation matches criteria for acute systemic involvement.",
-          "Location context adjusts baseline probabilities for local endemic factors.",
-          "Available resources limit extensive imaging; physical diagnostic signs prioritized.",
-          "Differential diagnosis narrowed based on age and symptom duration."
-        ],
-        diagnosis: isEmergency 
-          ? "Critical Priority: Suspected Acute Coronary Syndrome or Pulmonary Embolism."
-          : "High Probability: Community-Acquired Pneumonia or Viral Upper Respiratory Infection.",
-        confidence: isEmergency ? "94%" : "89%",
-        treatments: isEmergency
-          ? [
-              "Immediate transfer to Emergency Department via EMS.",
-              "Administer 324mg Aspirin chewed (assess for contraindications).",
-              "Maintain airway, establish IV access if possible.",
-              "Continuous cardiac monitoring and high-flow oxygen."
-            ]
-          : [
-              "Initiate empiric antibiotic therapy (e.g., Amoxicillin 1g TID).",
-              "Symptomatic relief with antipyretics and adequate hydration.",
-              "If symptoms worsen after 48h, order chest X-ray and CBC.",
-              "Schedule follow-up visit in 3-5 days."
-            ],
-        citations: [
-          { id: "WHO-2026", title: "WHO Emergency Triage Guidelines for Resource-Limited Settings" },
-          { id: "AHA-ACS", title: "AHA Acute Coronary Syndrome Update" }
-        ]
+    try {
+      const res = await fetch('http://localhost:8000/api/diagnose', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          age: formData.age,
+          gender: formData.gender,
+          location: formData.location,
+          symptoms: formData.symptoms,
+          resources: formData.resources
+        })
       });
-    }, 4000);
+      const data = await res.json();
+      setResult(data);
+      setStatus('success');
+    } catch (err) {
+      setError('Failed to connect to agent');
+      setStatus('idle');
+    }
   };
 
   return (
@@ -479,56 +464,44 @@ export default function App() {
               </div>
             )}
 
+            {error && status === 'idle' && (
+              <div className="emergency-banner" style={{ marginBottom: 0 }}>
+                <div style={{ paddingTop: '2px' }}><AlertIcon /></div>
+                <div>
+                  <div style={{ color: '#ef4444', fontWeight: '700', fontSize: '14px', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Connection Error</div>
+                  <div style={{ color: '#ededed', fontSize: '14px' }}>{error}</div>
+                </div>
+              </div>
+            )}
+
             {status === 'success' && result && (
               <div style={{ animation: 'slideUpFade 0.4s ease-out forwards' }}>
-                
-                {result.isEmergency && (
-                  <div className="emergency-banner">
-                    <div style={{ paddingTop: '2px' }}><AlertIcon /></div>
-                    <div>
-                      <div style={{ color: '#ef4444', fontWeight: '700', fontSize: '14px', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>EMERGENCY REFERRAL REQUIRED</div>
-                      <div style={{ color: '#ededed', fontSize: '14px' }}>Patient symptoms indicate a critical condition requiring immediate escalation. Follow acute protocols.</div>
-                    </div>
-                  </div>
-                )}
 
+                {/* Clinical Response */}
                 <div className="card" style={{ marginBottom: '24px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                    <h2 style={{ margin: 0 }}>Primary Assessment</h2>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '20px', fontWeight: '700', color: '#10b981', lineHeight: 1 }}>{result.confidence}</div>
-                      <div style={{ fontSize: '12px', color: '#888888', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '4px', fontWeight: '600' }}>Confidence</div>
-                    </div>
-                  </div>
-                  <div className="result-card success" style={{ marginBottom: 0, fontSize: '15px', fontWeight: '500' }}>
-                    {result.diagnosis}
+                  <h2>Clinical Assessment</h2>
+                  <div className="result-card success" style={{ marginBottom: 0, fontSize: '15px', lineHeight: '1.7', whiteSpace: 'pre-wrap' }}>
+                    {result.response}
                   </div>
                 </div>
 
-                <div className="card" style={{ marginBottom: '24px' }}>
-                  <h2>Recommended Protocol</h2>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {result.treatments.map((step, idx) => (
-                      <div key={idx} className="result-card" style={{ marginBottom: 0, display: 'flex', gap: '16px' }}>
-                        <div style={{ color: '#888888', fontWeight: '600', width: '20px', flexShrink: 0 }}>{idx + 1}.</div>
-                        <div>{step}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-                  <div className="card">
-                    <h3>Clinical Reasoning</h3>
+                {/* Reasoning Steps */}
+                {Array.isArray(result.reasoning_steps) && result.reasoning_steps.length > 0 && (
+                  <div className="card" style={{ marginBottom: '24px' }}>
+                    <h2>Reasoning Steps</h2>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                      {result.reasoning.map((r, i) => (
-                        <div key={i} className="result-card muted" style={{ marginBottom: 0, fontSize: '13px', padding: '16px' }}>
-                          {r}
+                      {result.reasoning_steps.map((step, idx) => (
+                        <div key={idx} className="result-card" style={{ marginBottom: 0, display: 'flex', gap: '16px' }}>
+                          <div style={{ color: '#888888', fontWeight: '600', width: '24px', flexShrink: 0 }}>{idx + 1}.</div>
+                          <div style={{ fontSize: '14px', lineHeight: '1.6' }}>{typeof step === 'object' ? (step.content || step.step || JSON.stringify(step)) : step}</div>
                         </div>
                       ))}
                     </div>
                   </div>
+                )}
 
+                {/* Citations */}
+                {Array.isArray(result.citations) && result.citations.length > 0 && (
                   <div className="card">
                     <h3>Evidentiary Citations</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -536,15 +509,22 @@ export default function App() {
                         <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                           <div style={{ marginTop: '2px' }}><FileTextIcon /></div>
                           <div>
-                            <div style={{ fontWeight: '500', color: '#ededed', fontSize: '13px' }}>{c.id}</div>
-                            <div style={{ color: '#888888', fontSize: '13px', marginTop: '2px' }}>{c.title}</div>
+                            {typeof c === 'string' ? (
+                              <div style={{ color: '#ededed', fontSize: '13px' }}>{c}</div>
+                            ) : (
+                              <>
+                                {c.id && <div style={{ fontWeight: '500', color: '#ededed', fontSize: '13px' }}>{c.id}</div>}
+                                {c.title && <div style={{ color: '#888888', fontSize: '13px', marginTop: '2px' }}>{c.title}</div>}
+                                {!c.id && !c.title && <div style={{ color: '#ededed', fontSize: '13px' }}>{JSON.stringify(c)}</div>}
+                              </>
+                            )}
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
-                </div>
-                
+                )}
+
               </div>
             )}
 
