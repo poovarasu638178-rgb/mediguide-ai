@@ -84,7 +84,7 @@ Please analyze this case and return the response strictly as a JSON object match
 """
 
         # 2. Get the OpenAI client from the project client
-        agent_client = project_client.get_openai_client()
+        agent_client = project_client.get_openai_client(api_key=AZURE_API_KEY)
         
         # 3. Create a thread
         thread = agent_client.beta.threads.create()
