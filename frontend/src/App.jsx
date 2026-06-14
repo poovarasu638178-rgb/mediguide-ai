@@ -1,3 +1,4 @@
+import ReactMarkdown from "react-markdown";
 import React, { useState, useEffect, useRef } from 'react';
 
 /* ═══════════════════════════════════════════════════════════
@@ -789,7 +790,7 @@ export default function App() {
                   <div className="pill pill-green" style={{marginLeft:'auto'}}>AI Generated</div>
                 </div>
                 <div className="rb yl" style={{marginBottom:0,fontSize:14.5,lineHeight:1.85,whiteSpace:'pre-wrap',color:'var(--y)'}}>
-                  {result.response}
+                  <ReactMarkdown>{result.response}</ReactMarkdown>
                 </div>
               </div>
 
