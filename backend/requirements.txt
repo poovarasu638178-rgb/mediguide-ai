@@ -1,7 +1,5 @@
 fastapi
 uvicorn
+openai
 python-dotenv
 pydantic
-openai
-azure-ai-projects>=2.1.0
-azure-identity
