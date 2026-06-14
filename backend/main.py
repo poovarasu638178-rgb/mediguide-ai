@@ -7,7 +7,8 @@ from pydantic import BaseModel
 import uvicorn
 from dotenv import load_dotenv
 
-from openai import AzureOpenAI
+from azure.identity import DefaultAzureCredential
+from azure.ai.projects import AIProjectClient
 
 load_dotenv()
 
@@ -22,98 +23,74 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Pydantic models matching the frontend's expected data structure
-class Resources(BaseModel):
-    lab: bool
-    imaging: bool
-    iv: bool
-    specialist: bool
-
-class DiagnosisRequest(BaseModel):
-    age: str | int
+class PatientData(BaseModel):
+    age: int
     gender: str
     location: str
     symptoms: str
-    resources: Resources
+    resources: dict
 
-# Load Environment Variables
+# Initialize Azure AI Project Client
 AZURE_AI_ENDPOINT = os.environ.get("AZURE_AI_ENDPOINT")
-AZURE_API_KEY = os.environ.get("AZURE_API_KEY")
+if not AZURE_AI_ENDPOINT:
+    print("WARNING: AZURE_AI_ENDPOINT is not set.")
+
+try:
+    project_client = AIProjectClient(
+        endpoint=AZURE_AI_ENDPOINT,
+        credential=DefaultAzureCredential()
+    )
+except Exception as e:
+    print(f"Failed to initialize AIProjectClient: {e}")
+    project_client = None
+
 AGENT_ID = os.environ.get("AGENT_ID", "MediGuide-AI-Agent")
 
-# Initialize Azure OpenAI Client
-project_client = None
-if AZURE_AI_ENDPOINT and AZURE_API_KEY:
-    project_client = AzureOpenAI(
-        api_key=AZURE_API_KEY,
-        api_version="2024-05-01-preview",
-        azure_endpoint=AZURE_AI_ENDPOINT
-    )
-
 @app.post("/api/diagnose")
-async def diagnose(request: DiagnosisRequest):
+async def diagnose(patient: PatientData):
     if not project_client:
         raise HTTPException(
             status_code=500, 
-            detail="Azure OpenAI Client is not configured. Missing AZURE_AI_ENDPOINT or AZURE_API_KEY."
-        )
-
-    if not AGENT_ID.startswith("asst_"):
-        raise HTTPException(
-            status_code=500,
-            detail=f"Invalid AGENT_ID format. Ensure your Render Environment Variables have an AGENT_ID starting with 'asst_'. Current value: '{AGENT_ID}'"
+            detail="Azure AI Client failed to initialize. Check Azure AD Credentials."
         )
 
     try:
-        # 1. Format the patient data
-        patient_data = f"""
-Patient Profile:
-- Age: {request.age}
-- Gender: {request.gender}
-- Location: {request.location}
+        # Format the patient data
+        patient_data = (
+            f"Patient Context:\n"
+            f"- Age: {patient.age}\n"
+            f"- Gender: {patient.gender}\n"
+            f"- Location: {patient.location}\n"
+            f"- Resources: {patient.resources}\n\n"
+            f"Symptoms/Query: {patient.symptoms}\n\n"
+            f"Please analyze this case and return the response strictly as a JSON object matching the MediGuide UI format with these exact keys:\n"
+            f"- 'isEmergency' (boolean)\n"
+            f"- 'diagnosis' (string)\n"
+            f"- 'confidence' (string, e.g., '94%')\n"
+            f"- 'reasoning' (array of strings)\n"
+            f"- 'treatments' (array of strings)\n"
+            f"- 'citations' (array of objects with 'id' and 'title' string properties)\n"
+        )
 
-Symptoms:
-{request.symptoms}
+        # 1. Create a thread
+        thread = project_client.agents.create_thread()
 
-Available Resources:
-- Lab: {request.resources.lab}
-- Imaging: {request.resources.imaging}
-- IV Access: {request.resources.iv}
-- Specialist: {request.resources.specialist}
-
-Please analyze this case and return the response strictly as a JSON object matching the MediGuide UI format with these exact keys:
-- "isEmergency" (boolean)
-- "diagnosis" (string)
-- "confidence" (string, e.g., "94%")
-- "reasoning" (array of strings)
-- "treatments" (array of strings)
-- "citations" (array of objects with "id" and "title" string properties)
-"""
-
-        # 2. Create a thread
-        thread = project_client.beta.threads.create()
-
-        # 3. Create a message
-        project_client.beta.threads.messages.create(
+        # 2. Create a message
+        project_client.agents.create_message(
             thread_id=thread.id,
             role="user",
             content=patient_data
         )
 
-        # 4. Run the MediGuide-AI-Agent
-        run = project_client.beta.threads.runs.create(
+        # 3. Create and process run
+        run = project_client.agents.create_and_process_run(
             thread_id=thread.id,
             assistant_id=AGENT_ID
         )
 
-        # Poll until the run is completed
-        while run.status in ["queued", "in_progress", "cancelling"]:
-            time.sleep(1)
-            run = project_client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
-
         if run.status == "completed":
-            # 5. Retrieve the agent's response
-            messages = project_client.beta.threads.messages.list(thread_id=thread.id)
+            # 4. List messages
+            messages = project_client.agents.list_messages(thread_id=thread.id)
             
             # The newest message is at index 0
             latest_message = messages.data[0]
@@ -126,12 +103,11 @@ Please analyze this case and return the response strictly as a JSON object match
                 
                 try:
                     # Parse the JSON and return it
-                    json_response = json.loads(cleaned_content)
-                    return json_response
+                    return json.loads(cleaned_content)
                 except json.JSONDecodeError:
                     return {
                         "isEmergency": False,
-                        "diagnosis": "Error parsing agent response.",
+                        "diagnosis": "Error parsing agent response as JSON. Raw output: " + content[:200],
                         "confidence": "N/A",
                         "reasoning": [content],
                         "treatments": [],
@@ -143,6 +119,7 @@ Please analyze this case and return the response strictly as a JSON object match
             raise HTTPException(status_code=500, detail=f"Agent run failed with status: {run.status}")
 
     except Exception as e:
+        print(f"Error during diagnosis: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/health")
@@ -154,4 +131,5 @@ def health_check():
     }
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
