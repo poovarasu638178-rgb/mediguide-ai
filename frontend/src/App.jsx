@@ -476,6 +476,8 @@ const LoadingPanel = ({ step, steps }) => (
 );
 
 /* ══════════════ MAIN APP ══════════════ */
+const API_URL = import.meta.env.VITE_API_URL || 'https://mediguide-ai-backend-1w8b.onrender.com';
+
 export default function App() {
   const [form, setForm] = useState({
     age: '', gender: '', location: '', symptoms: '',
@@ -519,7 +521,7 @@ export default function App() {
     if (!form.symptoms.trim()) return;
     setStatus('analyzing'); setLoadStep(0); setResult(null); setError(null);
     try {
-      const res = await fetch('https://literate-space-giggle-g4vq4v4xp7xrfp74r-8000.app.github.dev/api/diagnose', {
+      const res = await fetch(`${API_URL}/api/diagnose`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
