@@ -9,7 +9,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const CSS = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -44,7 +44,7 @@ const CSS = () => (
     body {
       background: var(--t9);
       color: var(--y);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-size: 14px;
       line-height: 1.6;
       min-height: 100vh;
@@ -65,9 +65,9 @@ const CSS = () => (
     #root { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
 
     /* ─── Typography ─── */
-    .serif { font-family: 'DM Serif Display', serif; }
-    h1 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; color: var(--y); }
-    h2 { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; color: var(--y); margin-bottom: 20px; }
+    .serif { font-family: 'Playfair Display', serif; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 500; color: var(--y); }
+    h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500; color: var(--y); margin-bottom: 20px; }
     h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ym); margin-bottom: 14px; }
 
     /* ─── Label ─── */
@@ -106,7 +106,7 @@ const CSS = () => (
       color: var(--y);
       border-radius: var(--rs);
       padding: 11px 14px;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-size: 13.5px;
       outline: none;
       transition: border-color .2s, box-shadow .2s, background .2s;
@@ -134,7 +134,7 @@ const CSS = () => (
     .btn {
       width: 100%; border: none; border-radius: var(--rs);
       padding: 13px 20px; cursor: pointer;
-      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
+      font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
       display: flex; align-items: center; justify-content: center; gap: 10px;
       transition: transform .15s, box-shadow .2s, filter .2s;
       position: relative; overflow: hidden;
@@ -266,7 +266,7 @@ const CSS = () => (
       background: var(--yx); border: 1px solid var(--gb);
       border-radius: var(--rs); padding: 16px 20px; text-align: center;
     }
-    .metric-val { font-family:'DM Serif Display',serif; font-size: 26px; color: var(--y); line-height: 1; }
+    .metric-val { font-family:'Playfair Display',serif; font-size: 26px; font-weight:500; color: var(--y); line-height: 1; }
     .metric-lbl { font-size: 10px; font-weight: 700; letter-spacing:.08em; text-transform:uppercase; color: var(--ym); margin-top: 5px; }
 
     /* ─── Top Banner ─── */
@@ -318,6 +318,14 @@ const CSS = () => (
       letter-spacing: 0.08em; text-transform: uppercase;
       padding: 6px 44px; transform: rotate(45deg);
       box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    
+    /* ─── Mobile Responsiveness ─── */
+    @media (max-width: 900px) {
+      .main-layout { flex-direction: column !important; padding: 20px !important; }
+      .sidebar { flex: 1 1 auto !important; position: static !important; width: 100% !important; }
+      .header { padding: 0 20px !important; }
+      .header-right-text { display: none !important; }
     }
   `}</style>
 );
@@ -550,27 +558,6 @@ export default function App() {
     <>
       <CSS />
 
-      {/* Hackathon ribbon */}
-      <div className="hack-badge">Hackathon 2026</div>
-
-      {/* ── Top announcement bar ── */}
-      <div className="topbar">
-        <div style={{display:'flex',alignItems:'center',gap:8}}>
-          <span style={{fontSize:14}}>🏆</span>
-          <span style={{fontSize:11,fontWeight:700,letterSpacing:'0.08em',textTransform:'uppercase',color:'rgba(243,232,188,0.55)'}}>
-            Microsoft Agents League Hackathon 2026
-          </span>
-        </div>
-        <div style={{width:1,height:14,background:'rgba(243,232,188,0.15)'}}/>
-        <div style={{display:'flex',alignItems:'center',gap:6}}>
-          <span style={{fontSize:11,color:'rgba(243,232,188,0.35)'}}>Built on</span>
-          <span className="pill pill-teal">Azure AI Foundry</span>
-        </div>
-        <div style={{width:1,height:14,background:'rgba(243,232,188,0.15)'}}/>
-        <div style={{fontSize:11,color:'rgba(243,232,188,0.35)'}}>by <span style={{color:'rgba(243,232,188,0.6)',fontWeight:600}}>Poovarasu S</span> · KIOT</div>
-      </div>
-
-      {/* ── Header ── */}
       <header className="header">
         {/* Logo */}
         <a className="logo-wrap" href="#" onClick={e=>e.preventDefault()}>
@@ -578,7 +565,7 @@ export default function App() {
             <LogoImg size={34} style={{borderRadius:8}} />
           </div>
           <div>
-            <div style={{fontSize:17,fontFamily:'DM Serif Display,serif',color:'var(--y)',lineHeight:1}}>MediGuide AI</div>
+            <div style={{fontSize:17,fontFamily:'Playfair Display,serif',fontWeight:500,color:'var(--y)',lineHeight:1}}>MediGuide AI</div>
             <div style={{fontSize:10,color:'rgba(243,232,188,0.38)',fontWeight:600,letterSpacing:'0.07em',textTransform:'uppercase',marginTop:2}}>
               Clinical Decision Support
             </div>
@@ -588,12 +575,12 @@ export default function App() {
         {/* Header right */}
         <div style={{display:'flex',alignItems:'center',gap:16}}>
           {caseCount > 0 && (
-            <div style={{display:'flex',alignItems:'center',gap:7,fontSize:12,color:'rgba(243,232,188,0.4)'}}>
+            <div className="header-right-text" style={{display:'flex',alignItems:'center',gap:7,fontSize:12,color:'rgba(243,232,188,0.4)'}}>
               <GridIco />
               <span>{caseCount} case{caseCount>1?'s':''} analyzed</span>
             </div>
           )}
-          <div style={{width:1,height:20,background:'rgba(243,232,188,0.1)'}}/>
+          <div className="header-right-text" style={{width:1,height:20,background:'rgba(243,232,188,0.1)'}}/>
           <div style={{display:'flex',alignItems:'center',gap:7}}>
             <div className="pdot"/>
             <span style={{fontSize:12,color:'rgba(243,232,188,0.4)',fontWeight:500}}>Agent Online</span>
@@ -602,7 +589,7 @@ export default function App() {
       </header>
 
       {/* ── Body ── */}
-      <main style={{flex:1,display:'flex',gap:28,padding:'32px 40px',maxWidth:1360,margin:'0 auto',width:'100%',alignItems:'flex-start'}}>
+      <main className="main-layout" style={{flex:1,display:'flex',gap:28,padding:'32px 40px',maxWidth:1360,margin:'0 auto',width:'100%',alignItems:'flex-start'}}>
 
         {/* ════════ SIDEBAR / FORM ════════ */}
         <aside className="sidebar">
