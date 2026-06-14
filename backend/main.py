@@ -83,28 +83,25 @@ Please analyze this case and return the response strictly as a JSON object match
 - "citations" (array of objects with "id" and "title" string properties)
 """
 
-        # 2. Get the OpenAI client from the project client
-        agent_client = project_client.get_openai_client(api_key=AZURE_API_KEY)
-        
-        # 3. Create a thread
-        thread = agent_client.beta.threads.create()
+        # 2. Create a thread
+        thread = project_client.agents.create_thread()
 
-        # 4. Create a message
-        agent_client.beta.threads.messages.create(
+        # 3. Create a message
+        project_client.agents.create_message(
             thread_id=thread.id,
             role="user",
             content=patient_data
         )
 
-        # 5. Run the MediGuide-AI-Agent
-        run = agent_client.beta.threads.runs.create_and_poll(
+        # 4. Run the MediGuide-AI-Agent
+        run = project_client.agents.create_and_process_run(
             thread_id=thread.id,
             assistant_id=AGENT_ID
         )
 
         if run.status == "completed":
-            # 6. Retrieve the agent's response
-            messages = agent_client.beta.threads.messages.list(thread_id=thread.id)
+            # 5. Retrieve the agent's response
+            messages = project_client.agents.list_messages(thread_id=thread.id)
             
             # The newest message is at index 0 (descending order by default)
             latest_message = messages.data[0]
