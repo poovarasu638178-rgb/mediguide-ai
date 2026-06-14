@@ -319,13 +319,56 @@ const CSS = () => (
       padding: 6px 44px; transform: rotate(45deg);
       box-shadow: 0 2px 12px rgba(0,0,0,0.3);
     }
-    
+
     /* ─── Mobile Responsiveness ─── */
+
+    /* Tablet: ≤1024px */
+    @media (max-width: 1024px) {
+      .main-layout { padding: 24px 24px !important; gap: 20px !important; }
+      .sidebar { flex: 0 0 340px !important; }
+    }
+
+    /* Mobile landscape + small tablet: ≤900px */
     @media (max-width: 900px) {
-      .main-layout { flex-direction: column !important; padding: 20px !important; }
-      .sidebar { flex: 1 1 auto !important; position: static !important; width: 100% !important; }
+      .main-layout {
+        flex-direction: column !important;
+        padding: 16px !important;
+        gap: 16px !important;
+        align-items: stretch !important;
+      }
+      .sidebar {
+        flex: 1 1 auto !important;
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
       .header { padding: 0 20px !important; }
       .header-right-text { display: none !important; }
+      .card { padding: 20px !important; }
+      .card-dark { padding: 20px !important; }
+      .hack-badge { display: none !important; }
+    }
+
+    /* Mobile portrait: ≤600px */
+    @media (max-width: 600px) {
+      .main-layout { padding: 12px !important; gap: 12px !important; }
+      .header { height: 56px !important; padding: 0 16px !important; }
+      .card { padding: 16px !important; border-radius: 12px !important; }
+      .card-dark { padding: 16px !important; border-radius: 12px !important; }
+      h2 { font-size: 17px !important; }
+      .btn { padding: 12px 16px !important; font-size: 13.5px !important; }
+      .inp { padding: 10px 12px !important; font-size: 13px !important; }
+      .chk { padding: 9px 12px !important; font-size: 12.5px !important; }
+      .metric-val { font-size: 22px !important; }
+      .rb { padding: 14px 16px !important; }
+    }
+
+    /* Very small: ≤375px */
+    @media (max-width: 375px) {
+      .main-layout { padding: 10px !important; }
+      .card { padding: 14px !important; }
+      h2 { font-size: 15px !important; }
+      .btn { padding: 11px 14px !important; }
     }
   `}</style>
 );
@@ -810,10 +853,10 @@ export default function App() {
       </main>
 
       {/* ── Footer ── */}
-      <footer style={{borderTop:'1px solid var(--gb)',padding:'20px 40px',display:'flex',alignItems:'center',justifyContent:'center',gap:16}}>
+      <footer style={{borderTop:'1px solid var(--gb)',padding:'20px 40px',display:'flex',alignItems:'center',justifyContent:'center',gap:16,flexWrap:'wrap'}}>
         <LogoImg size={26} style={{borderRadius:7,opacity:0.7}} />
-        <span style={{fontSize:13,color:'rgba(243,232,188,0.45)',fontWeight:500,letterSpacing:'0.01em'}}>
-          <strong style={{color:'rgba(243,232,188,0.7)',fontFamily:'DM Serif Display,serif',fontWeight:400,fontSize:14}}>MediGuide AI</strong>
+        <span style={{fontSize:13,color:'rgba(243,232,188,0.45)',fontWeight:500,letterSpacing:'0.01em',textAlign:'center'}}>
+          <strong style={{color:'rgba(243,232,188,0.7)',fontFamily:'Playfair Display,serif',fontWeight:500,fontSize:14}}>MediGuide AI</strong>
           {' '}—{' '}
           Created by <strong style={{color:'rgba(243,232,188,0.65)',fontWeight:600}}>Poovarasu S</strong>{' '}
           for{' '}
