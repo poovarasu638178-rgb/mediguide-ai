@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
    MEDIGUIDE AI  —  Premium Business UI
    Palette: Authentic Teal #035352  ·  Sidecar Yellow #F3E8BC
    Microsoft Agents League Hackathon 2026
+   Logo/Favicon: favicon.png (user asset)
 ═══════════════════════════════════════════════════════════ */
 
 const CSS = () => (
@@ -321,14 +322,15 @@ const CSS = () => (
   `}</style>
 );
 
-/* ══════════════ SVG ICONS ══════════════ */
-const LogoSVG = ({ size = 20 }) => (
-  <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
-    <rect x="22" y="8" width="20" height="48" rx="8" fill="#F3E8BC"/>
-    <rect x="8" y="22" width="48" height="20" rx="8" fill="#F3E8BC"/>
-    <circle cx="32" cy="32" r="9" fill="#035352"/>
-  </svg>
+/* ── Logo image component using user's favicon.png ── */
+const LogoImg = ({ size = 32, style = {} }) => (
+  <img src="/favicon.png" alt="MediGuide AI Logo"
+    width={size} height={size}
+    style={{ borderRadius: 8, objectFit: 'contain', display: 'block', ...style }}
+  />
 );
+
+/* ══════════════ SVG ICONS ══════════════ */
 
 const CheckIco = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -397,7 +399,7 @@ const EmptyState = () => (
       display:'flex',alignItems:'center',justifyContent:'center',
       boxShadow:'0 0 48px rgba(3,83,82,0.4)',
     }}>
-      <LogoSVG size={44} />
+      <LogoImg size={60} style={{borderRadius:12}} />
     </div>
     <div>
       <div style={{fontSize:20,fontFamily:'DM Serif Display,serif',color:'rgba(243,232,188,0.55)',marginBottom:8}}>
@@ -428,8 +430,9 @@ const LoadingPanel = ({ step, steps }) => (
           margin:'0 auto 20px',
           boxShadow:'0 0 40px rgba(3,83,82,0.5)',
           animation:'stepglow 1.4s ease-in-out infinite',
+          padding:8,
         }}>
-          <LogoSVG size={32} />
+          <LogoImg size={48} style={{borderRadius:10}} />
         </div>
         <div style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:'rgba(243,232,188,0.4)',marginBottom:6}}>
           Azure AI Foundry
@@ -569,7 +572,9 @@ export default function App() {
       <header className="header">
         {/* Logo */}
         <a className="logo-wrap" href="#" onClick={e=>e.preventDefault()}>
-          <div className="logo-ico"><LogoSVG size={20} /></div>
+          <div className="logo-ico" style={{padding:4,background:'transparent',border:'none',boxShadow:'none'}}>
+            <LogoImg size={34} style={{borderRadius:8}} />
+          </div>
           <div>
             <div style={{fontSize:17,fontFamily:'DM Serif Display,serif',color:'var(--y)',lineHeight:1}}>MediGuide AI</div>
             <div style={{fontSize:10,color:'rgba(243,232,188,0.38)',fontWeight:600,letterSpacing:'0.07em',textTransform:'uppercase',marginTop:2}}>
@@ -816,20 +821,16 @@ export default function App() {
       </main>
 
       {/* ── Footer ── */}
-      <footer style={{borderTop:'1px solid var(--gb)',padding:'18px 40px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-        <div style={{display:'flex',alignItems:'center',gap:10}}>
-          <div className="logo-ico" style={{width:26,height:26,borderRadius:7}}>
-            <LogoSVG size={13}/>
-          </div>
-          <span style={{fontSize:12,color:'rgba(243,232,188,0.3)'}}>MediGuide AI &copy; 2026</span>
-        </div>
-        <div style={{display:'flex',gap:16,alignItems:'center'}}>
-          <span className="pill pill-teal">Azure AI Foundry</span>
-          <span style={{fontSize:11,color:'rgba(243,232,188,0.2)'}}>|</span>
-          <span style={{fontSize:12,color:'rgba(243,232,188,0.3)'}}>Built by <strong style={{color:'rgba(243,232,188,0.5)'}}>Poovarasu S</strong> · KIOT</span>
-          <span style={{fontSize:11,color:'rgba(243,232,188,0.2)'}}>|</span>
-          <span className="pill pill-yellow">🏆 Hackathon 2026</span>
-        </div>
+      <footer style={{borderTop:'1px solid var(--gb)',padding:'20px 40px',display:'flex',alignItems:'center',justifyContent:'center',gap:16}}>
+        <LogoImg size={26} style={{borderRadius:7,opacity:0.7}} />
+        <span style={{fontSize:13,color:'rgba(243,232,188,0.45)',fontWeight:500,letterSpacing:'0.01em'}}>
+          <strong style={{color:'rgba(243,232,188,0.7)',fontFamily:'DM Serif Display,serif',fontWeight:400,fontSize:14}}>MediGuide AI</strong>
+          {' '}—{' '}
+          Created by <strong style={{color:'rgba(243,232,188,0.65)',fontWeight:600}}>Poovarasu S</strong>{' '}
+          for{' '}
+          <strong style={{color:'rgba(243,232,188,0.65)',fontWeight:600}}>Microsoft Agents League Hackathon 2026</strong>
+        </span>
+        <span style={{fontSize:16}}>🏆</span>
       </footer>
     </>
   );
