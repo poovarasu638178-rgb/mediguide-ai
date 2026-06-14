@@ -84,24 +84,24 @@ Please analyze this case and return the response strictly as a JSON object match
 """
 
         # 2. Create a thread
-        thread = project_client.agents.create_thread()
+        thread = project_client.agents.threads.create()
 
         # 3. Create a message
-        project_client.agents.create_message(
+        project_client.agents.messages.create(
             thread_id=thread.id,
             role="user",
             content=patient_data
         )
 
         # 4. Run the MediGuide-AI-Agent
-        run = project_client.agents.create_and_process_run(
+        run = project_client.agents.runs.create_and_process(
             thread_id=thread.id,
             assistant_id=AGENT_ID
         )
 
         if run.status == "completed":
             # 5. Retrieve the agent's response
-            messages = project_client.agents.list_messages(thread_id=thread.id)
+            messages = project_client.agents.messages.list(thread_id=thread.id)
             
             # The newest message is at index 0 (descending order by default)
             latest_message = messages.data[0]
