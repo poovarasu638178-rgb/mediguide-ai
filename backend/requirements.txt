@@ -2,4 +2,4 @@ fastapi
 uvicorn
 python-dotenv
 pydantic
-azure-ai-projects==1.0.0b6
+openai

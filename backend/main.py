@@ -6,8 +6,7 @@ from pydantic import BaseModel
 import uvicorn
 from dotenv import load_dotenv
 
-from azure.ai.projects import AIProjectClient
-from azure.core.credentials import AzureKeyCredential
+from openai import AzureOpenAI
 
 load_dotenv()
 
@@ -16,7 +15,7 @@ app = FastAPI(title="MediGuide AI API")
 # Setup CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify your frontend origin
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,24 +36,25 @@ class DiagnosisRequest(BaseModel):
     resources: Resources
 
 # Load Environment Variables
-AZURE_AI_ENDPOINT = os.environ.get("AZURE_AI_ENDPOINT")
-AZURE_API_KEY = os.environ.get("AZURE_API_KEY")
-AGENT_ID = os.environ.get("AGENT_ID", "MediGuide-AI-Agent")
+AZURE_AI_ENDPOINT = os.environ.get("AZURE_AI_ENDPOINT", "").rstrip("/")
+AZURE_API_KEY     = os.environ.get("AZURE_API_KEY")
+AGENT_ID          = os.environ.get("AGENT_ID", "MediGuide-AI-Agent")
 
-# Initialize Azure AI Project Client
-project_client = None
+# Initialize AzureOpenAI client (works with Azure AI Foundry endpoints)
+client = None
 if AZURE_AI_ENDPOINT and AZURE_API_KEY:
-    project_client = AIProjectClient(
-        endpoint=AZURE_AI_ENDPOINT,
-        credential=AzureKeyCredential(AZURE_API_KEY)
+    client = AzureOpenAI(
+        api_key=AZURE_API_KEY,
+        api_version="2024-05-01-preview",
+        azure_endpoint=AZURE_AI_ENDPOINT
     )
 
 @app.post("/api/diagnose")
 async def diagnose(request: DiagnosisRequest):
-    if not project_client:
+    if not client:
         raise HTTPException(
-            status_code=500, 
-            detail="Azure AI Project Client is not configured. Missing AZURE_AI_ENDPOINT or AZURE_API_KEY."
+            status_code=500,
+            detail="Azure OpenAI client not configured. Missing AZURE_AI_ENDPOINT or AZURE_API_KEY."
         )
 
     try:
@@ -74,7 +74,7 @@ Available Resources:
 - IV Access: {request.resources.iv}
 - Specialist: {request.resources.specialist}
 
-Please analyze this case and return the response strictly as a JSON object matching the MediGuide UI format with these exact keys:
+Please analyze this case and return the response strictly as a JSON object with these exact keys:
 - "isEmergency" (boolean)
 - "diagnosis" (string)
 - "confidence" (string, e.g., "94%")
@@ -84,43 +84,40 @@ Please analyze this case and return the response strictly as a JSON object match
 """
 
         # 2. Create a thread
-        thread = project_client.agents.create_thread()
+        thread = client.beta.threads.create()
 
-        # 3. Create a message
-        project_client.agents.create_message(
+        # 3. Add user message to thread
+        client.beta.threads.messages.create(
             thread_id=thread.id,
             role="user",
             content=patient_data
         )
 
-        # 4. Run the MediGuide-AI-Agent
-        run = project_client.agents.create_and_process_run(
+        # 4. Run the MediGuide-AI-Agent and wait for completion
+        run = client.beta.threads.runs.create_and_poll(
             thread_id=thread.id,
             assistant_id=AGENT_ID
         )
 
         if run.status == "completed":
             # 5. Retrieve the agent's response
-            messages = project_client.agents.list_messages(thread_id=thread.id)
-            
-            # The newest message is at index 0 (descending order by default)
+            messages = client.beta.threads.messages.list(thread_id=thread.id)
+
+            # The newest message is first (descending order by default)
             latest_message = messages.data[0]
-            
+
             if latest_message.role == "assistant":
                 content = latest_message.content[0].text.value
-                
+
                 # Strip markdown codeblocks if the agent includes them
-                cleaned_content = content.replace("```json", "").replace("```", "").strip()
-                
+                cleaned = content.replace("```json", "").replace("```", "").strip()
+
                 try:
-                    # Parse the JSON and return it
-                    json_response = json.loads(cleaned_content)
-                    return json_response
+                    return json.loads(cleaned)
                 except json.JSONDecodeError:
-                    # Fallback if agent doesn't return perfect JSON
                     return {
                         "isEmergency": False,
-                        "diagnosis": "Error parsing agent response. Non-JSON returned.",
+                        "diagnosis": "Error parsing agent response.",
                         "confidence": "N/A",
                         "reasoning": [content],
                         "treatments": [],
@@ -137,8 +134,8 @@ Please analyze this case and return the response strictly as a JSON object match
 @app.get("/health")
 def health_check():
     return {
-        "status": "ok", 
-        "agent_configured": project_client is not None,
+        "status": "ok",
+        "agent_configured": client is not None,
         "agent_id": AGENT_ID
     }
 
