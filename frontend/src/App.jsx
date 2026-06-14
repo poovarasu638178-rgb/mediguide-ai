@@ -1,40 +1,48 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-/* ─────────────────────────────────────────────
-   COLOR TOKENS
-   Primary Dark  : #035352  (Authentic Teal)
-   Accent Warm   : #F3E8BC  (Sidecar Yellow)
-───────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   MEDIGUIDE AI  —  Premium Business UI
+   Palette: Authentic Teal #035352  ·  Sidecar Yellow #F3E8BC
+   Microsoft Agents League Hackathon 2026
+═══════════════════════════════════════════════════════════ */
 
-const GlobalStyles = () => (
+const CSS = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --teal-900: #011f1f;
-      --teal-800: #022b2b;
-      --teal-700: #035352;
-      --teal-600: #046a69;
-      --teal-500: #058584;
-      --teal-400: #2aa5a4;
-      --yellow:   #F3E8BC;
-      --yellow-dim: rgba(243,232,188,0.12);
-      --yellow-muted: rgba(243,232,188,0.55);
-      --glass: rgba(3,83,82,0.45);
-      --glass-border: rgba(243,232,188,0.15);
-      --red: #e05252;
-      --green: #4ecca3;
-      --radius: 14px;
-      --radius-sm: 8px;
+      --t9: #010e0e;
+      --t8: #01201f;
+      --t7: #022b2a;
+      --t6: #035352;
+      --t5: #046a69;
+      --t4: #05817f;
+      --t3: #2aaba9;
+      --t2: #6fcfcd;
+      --y:  #F3E8BC;
+      --yd: rgba(243,232,188,0.75);
+      --ym: rgba(243,232,188,0.45);
+      --yl: rgba(243,232,188,0.18);
+      --yx: rgba(243,232,188,0.08);
+      --glass: rgba(3,83,82,0.35);
+      --glass2: rgba(1,32,31,0.6);
+      --gb: rgba(243,232,188,0.12);
+      --green: #3dd68c;
+      --red:   #f87171;
+      --r: 16px;
+      --rs: 10px;
+      --rx: 6px;
+      --shadow: 0 4px 32px rgba(0,0,0,0.35);
+      --shadow-lg: 0 8px 64px rgba(0,0,0,0.5);
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--teal-900);
-      color: var(--yellow);
+      background: var(--t9);
+      color: var(--y);
       font-family: 'Inter', sans-serif;
       font-size: 14px;
       line-height: 1.6;
@@ -42,324 +50,295 @@ const GlobalStyles = () => (
       overflow-x: hidden;
     }
 
-    /* Animated background mesh */
+    /* ─── Background ─── */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0; z-index: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 10% 10%, rgba(5,133,132,0.18) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 90% 90%, rgba(3,83,82,0.25) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(243,232,188,0.03) 0%, transparent 70%);
+        radial-gradient(ellipse 90% 70% at -5% -5%,  rgba(5,129,127,0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 90% at 105% 105%, rgba(3,83,82,0.30) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 40% at 50% 50%,  rgba(243,232,188,0.025) 0%, transparent 70%);
       pointer-events: none;
-      z-index: 0;
     }
 
-    #root { position: relative; z-index: 1; }
+    #root { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
 
-    /* ── Typography ── */
-    h1 { font-family: 'DM Serif Display', serif; font-size: 30px; font-weight: 400; color: var(--yellow); letter-spacing: -0.3px; }
-    h2 { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; color: var(--yellow); margin-bottom: 18px; }
-    h3 { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--yellow-muted); margin-bottom: 14px; }
+    /* ─── Typography ─── */
+    .serif { font-family: 'DM Serif Display', serif; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; color: var(--y); }
+    h2 { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; color: var(--y); margin-bottom: 20px; }
+    h3 { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ym); margin-bottom: 14px; }
 
-    /* ── Glass Card ── */
+    /* ─── Label ─── */
+    .lbl {
+      font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--ym); display: block; margin-bottom: 7px;
+    }
+
+    /* ─── Glass Card ─── */
     .card {
       background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
+      border: 1px solid var(--gb);
+      border-radius: var(--r);
       padding: 28px;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      transition: border-color 0.3s;
-    }
-    .card:hover { border-color: rgba(243,232,188,0.25); }
-
-    /* ── Label ── */
-    .label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--yellow-muted);
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    /* ── Input ── */
-    .input-field {
-      width: 100%;
-      background: rgba(1,31,31,0.7);
-      border: 1px solid rgba(243,232,188,0.18);
-      color: var(--yellow);
-      border-radius: var(--radius-sm);
-      padding: 11px 14px;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.25s, box-shadow 0.25s;
-    }
-    .input-field::placeholder { color: rgba(243,232,188,0.3); }
-    .input-field:focus {
-      border-color: rgba(243,232,188,0.55);
-      box-shadow: 0 0 0 3px rgba(243,232,188,0.07);
-    }
-    select.input-field option { background: #022b2b; }
-
-    /* ── Checkbox ── */
-    .check-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      border: 1px solid rgba(243,232,188,0.1);
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
-      user-select: none;
-      font-size: 13px;
-      color: var(--yellow);
-    }
-    .check-row:hover { background: rgba(243,232,188,0.06); border-color: rgba(243,232,188,0.25); }
-    .check-row input[type=checkbox] { accent-color: var(--teal-400); width: 15px; height: 15px; flex-shrink: 0; }
-
-    /* ── Primary Button ── */
-    .btn-primary {
-      width: 100%;
-      background: var(--yellow);
-      color: var(--teal-900);
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 14px 20px;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-    .btn-primary::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .btn-primary:hover:not(:disabled)::after { opacity: 1; }
-    .btn-primary:hover:not(:disabled) { background: #fdf5d5; box-shadow: 0 8px 32px rgba(243,232,188,0.25); transform: translateY(-1px); }
-    .btn-primary:active:not(:disabled) { transform: translateY(0); }
-    .btn-primary:disabled { background: rgba(243,232,188,0.15); color: rgba(243,232,188,0.35); cursor: not-allowed; }
-
-    /* ── Spinner ── */
-    .spinner {
-      width: 17px; height: 17px;
-      border: 2px solid rgba(3,83,82,0.4);
-      border-top-color: var(--teal-900);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      flex-shrink: 0;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── Pulse dot ── */
-    .pulse-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      animation: pulse 1.8s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.6); opacity: 0.5; }
-    }
-
-    /* ── Top banner ── */
-    .top-banner {
-      background: linear-gradient(90deg, var(--teal-800) 0%, var(--teal-700) 50%, var(--teal-800) 100%);
-      border-bottom: 1px solid rgba(243,232,188,0.12);
-      padding: 9px 16px;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      color: var(--yellow-muted);
-      text-transform: uppercase;
-    }
-
-    /* ── Header ── */
-    .site-header {
-      padding: 22px 40px;
-      border-bottom: 1px solid rgba(243,232,188,0.1);
-      background: rgba(1,31,31,0.8);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      box-shadow: var(--shadow);
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .card:hover { border-color: rgba(243,232,188,0.2); }
+    .card-dark {
+      background: var(--glass2);
+      border: 1px solid var(--gb);
+      border-radius: var(--r);
+      padding: 28px;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: var(--shadow);
     }
 
-    /* ── Step tracker ── */
-    .step-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(243,232,188,0.07);
-      transition: opacity 0.4s;
+    /* ─── Input ─── */
+    .inp {
+      width: 100%;
+      background: rgba(1,14,14,0.6);
+      border: 1px solid rgba(243,232,188,0.15);
+      color: var(--y);
+      border-radius: var(--rs);
+      padding: 11px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13.5px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s, background .2s;
     }
-    .step-item:last-child { border-bottom: none; }
-    .step-icon {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 13px;
-      font-weight: 700;
+    .inp::placeholder { color: rgba(243,232,188,0.25); }
+    .inp:focus { border-color: rgba(243,232,188,0.5); box-shadow: 0 0 0 3px rgba(243,232,188,0.06); background: rgba(1,14,14,0.8); }
+    select.inp { appearance: none; cursor: pointer; }
+    select.inp option { background: #022b2a; }
+    textarea.inp { resize: vertical; min-height: 140px; line-height: 1.7; }
+
+    /* ─── Checkbox Row ─── */
+    .chk {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border-radius: var(--rs);
+      border: 1px solid rgba(243,232,188,0.1);
+      cursor: pointer; user-select: none;
+      font-size: 13px; color: var(--yd);
+      transition: background .15s, border-color .15s;
     }
-    .step-icon.done { background: rgba(78,204,163,0.15); color: var(--green); border: 1px solid rgba(78,204,163,0.3); }
-    .step-icon.active { background: rgba(243,232,188,0.12); color: var(--yellow); border: 1px solid rgba(243,232,188,0.3); animation: stepPulse 1.2s ease-in-out infinite; }
-    .step-icon.pending { background: rgba(243,232,188,0.05); color: rgba(243,232,188,0.25); border: 1px solid rgba(243,232,188,0.1); }
-    @keyframes stepPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(243,232,188,0.2); }
-      50% { box-shadow: 0 0 0 6px rgba(243,232,188,0); }
+    .chk:hover { background: var(--yx); border-color: rgba(243,232,188,0.22); }
+    .chk input { accent-color: var(--t3); width: 15px; height: 15px; flex-shrink: 0; }
+    .chk-icon { font-size: 15px; flex-shrink: 0; }
+
+    /* ─── Primary CTA Button ─── */
+    .btn {
+      width: 100%; border: none; border-radius: var(--rs);
+      padding: 13px 20px; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: transform .15s, box-shadow .2s, filter .2s;
+      position: relative; overflow: hidden;
+    }
+    .btn-cta { background: var(--y); color: var(--t9); }
+    .btn-cta::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%);
+      opacity: 0; transition: opacity .2s;
+    }
+    .btn-cta:hover:not(:disabled)::after { opacity: 1; }
+    .btn-cta:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(243,232,188,0.22); filter: brightness(1.04); }
+    .btn-cta:active:not(:disabled) { transform: translateY(0); }
+    .btn-cta:disabled { background: rgba(243,232,188,0.12); color: rgba(243,232,188,0.3); cursor: not-allowed; }
+    .btn-ghost {
+      background: transparent; color: var(--ym);
+      border: 1px solid rgba(243,232,188,0.18);
+      padding: 9px 18px; width: auto; border-radius: var(--rs); font-size: 13px; font-weight: 600;
+    }
+    .btn-ghost:hover { border-color: rgba(243,232,188,0.4); color: var(--y); background: var(--yx); }
+
+    /* ─── Tag / Pill ─── */
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 10px; border-radius: 100px;
+      font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em;
+      border: 1px solid; white-space: nowrap;
+    }
+    .pill-yellow { background: rgba(243,232,188,0.1); border-color: rgba(243,232,188,0.2); color: var(--ym); }
+    .pill-green  { background: rgba(61,214,140,0.1); border-color: rgba(61,214,140,0.3); color: var(--green); }
+    .pill-teal   { background: rgba(5,129,127,0.15); border-color: rgba(5,129,127,0.3); color: var(--t2); }
+
+    /* ─── Spinner ─── */
+    .spin {
+      width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+      border: 2px solid rgba(3,83,82,0.4); border-top-color: var(--t9);
+      animation: rotate .75s linear infinite;
+    }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+
+    /* ─── Pulsing dot ─── */
+    .pdot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0;
+      animation: pdot 2s ease-in-out infinite;
+    }
+    @keyframes pdot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.7);opacity:.45} }
+
+    /* ─── Divider ─── */
+    .divider { height: 1px; background: var(--gb); margin: 22px 0; }
+
+    /* ─── Step tracker ─── */
+    .step { display: flex; align-items: center; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--yx); }
+    .step:last-child { border-bottom: none; }
+    .step-ico {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+      transition: all .3s;
+    }
+    .step-ico.done   { background: rgba(61,214,140,0.12); color: var(--green); border: 1.5px solid rgba(61,214,140,0.3); }
+    .step-ico.active { background: rgba(243,232,188,0.1); color: var(--y); border: 1.5px solid rgba(243,232,188,0.35); animation: stepglow 1.4s ease-in-out infinite; }
+    .step-ico.pend   { background: var(--yx); color: rgba(243,232,188,0.2); border: 1.5px solid rgba(243,232,188,0.08); }
+    @keyframes stepglow { 0%,100%{box-shadow:0 0 0 0 rgba(243,232,188,0.15)} 50%{box-shadow:0 0 0 7px rgba(243,232,188,0)} }
+
+    /* ─── Result block ─── */
+    .rb {
+      background: rgba(1,14,14,0.45); border: 1px solid rgba(243,232,188,0.1);
+      border-radius: var(--rs); padding: 18px 20px; margin-bottom: 12px;
+      transition: border-color .2s;
+    }
+    .rb:last-child { margin-bottom: 0; }
+    .rb:hover { border-color: rgba(243,232,188,0.22); }
+    .rb.yl { border-left: 3px solid var(--y); }
+    .rb.gr { border-left: 3px solid var(--green); }
+    .rb.rd { border-left: 3px solid var(--red); }
+
+    /* ─── Number badge ─── */
+    .nbadge {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(243,232,188,0.08); border: 1px solid rgba(243,232,188,0.15);
+      color: var(--ym); font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
     }
 
-    /* ── Result blocks ── */
-    .result-block {
-      background: rgba(1,31,31,0.5);
-      border: 1px solid rgba(243,232,188,0.12);
-      border-radius: var(--radius-sm);
-      padding: 18px 20px;
-      margin-bottom: 12px;
-      transition: border-color 0.25s;
-    }
-    .result-block:last-child { margin-bottom: 0; }
-    .result-block:hover { border-color: rgba(243,232,188,0.25); }
-    .result-block.accent { border-left: 3px solid var(--yellow); border-color: rgba(243,232,188,0.25); }
-    .result-block.success { border-left: 3px solid var(--green); }
-    .result-block.danger  { border-left: 3px solid var(--red); }
-
-    /* ── Emergency banner ── */
-    .emergency-banner {
-      background: rgba(224,82,82,0.1);
-      border: 1px solid rgba(224,82,82,0.4);
-      border-radius: var(--radius-sm);
-      padding: 16px 20px;
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      margin-bottom: 22px;
-      animation: fadeSlideDown 0.4s ease-out;
+    /* ─── Error Banner ─── */
+    .err-banner {
+      background: rgba(248,113,113,0.09); border: 1px solid rgba(248,113,113,0.3);
+      border-radius: var(--rs); padding: 13px 16px;
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 13px; color: #fca5a5;
     }
 
-    /* ── Animations ── */
-    @keyframes fadeSlideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .anim-up { animation: fadeSlideUp 0.45s ease-out both; }
-    .anim-up-1 { animation-delay: 0.05s; }
-    .anim-up-2 { animation-delay: 0.12s; }
-    .anim-up-3 { animation-delay: 0.20s; }
-
-    /* ── Empty state ── */
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      min-height: 500px;
-      gap: 16px;
-      text-align: center;
-      color: rgba(243,232,188,0.35);
+    /* ─── Emergency Banner ─── */
+    .eme-banner {
+      background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.35);
+      border-radius: var(--rs); padding: 16px 20px;
+      display: flex; gap: 14px; align-items: flex-start; margin-bottom: 22px;
+      animation: slideDown .4s ease-out;
     }
 
-    /* ── Citation item ── */
-    .citation-item {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      padding: 14px 0;
-      border-bottom: 1px solid rgba(243,232,188,0.08);
-    }
-    .citation-item:last-child { border-bottom: none; padding-bottom: 0; }
-
-    /* ── Number badge ── */
-    .num-badge {
-      width: 26px; height: 26px;
-      border-radius: 50%;
-      background: rgba(243,232,188,0.1);
-      border: 1px solid rgba(243,232,188,0.2);
-      color: var(--yellow-muted);
-      font-size: 11px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    /* ── Divider ── */
-    .divider {
-      height: 1px;
-      background: rgba(243,232,188,0.08);
-      margin: 20px 0;
-    }
-
-    /* ── Tag ── */
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(243,232,188,0.1);
-      border: 1px solid rgba(243,232,188,0.2);
-      border-radius: 100px;
-      padding: 3px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--yellow-muted);
-      letter-spacing: 0.04em;
-    }
-
-    /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 6px; }
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(243,232,188,0.15); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(243,232,188,0.3); }
+    ::-webkit-scrollbar-thumb { background: rgba(243,232,188,0.12); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(243,232,188,0.25); }
+
+    /* ─── Animations ─── */
+    @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes slideUp   { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn    { from{opacity:0} to{opacity:1} }
+
+    .au  { animation: slideUp .45s ease-out both; }
+    .au1 { animation-delay: .07s; }
+    .au2 { animation-delay: .14s; }
+    .au3 { animation-delay: .22s; }
+
+    /* ─── Citation ─── */
+    .cit { display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--yx); }
+    .cit:last-child { border-bottom: none; padding-bottom: 0; }
+    .cit-num {
+      width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0;
+      background: var(--yx); border: 1px solid rgba(243,232,188,0.12);
+      color: var(--ym); font-size: 10px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; margin-top: 1px;
+    }
+
+    /* ─── Metric tile ─── */
+    .metric {
+      background: var(--yx); border: 1px solid var(--gb);
+      border-radius: var(--rs); padding: 16px 20px; text-align: center;
+    }
+    .metric-val { font-family:'DM Serif Display',serif; font-size: 26px; color: var(--y); line-height: 1; }
+    .metric-lbl { font-size: 10px; font-weight: 700; letter-spacing:.08em; text-transform:uppercase; color: var(--ym); margin-top: 5px; }
+
+    /* ─── Top Banner ─── */
+    .topbar {
+      background: linear-gradient(90deg, var(--t8) 0%, #023e3d 50%, var(--t8) 100%);
+      border-bottom: 1px solid rgba(243,232,188,0.1);
+      padding: 8px 24px; display: flex; align-items: center; justify-content: center; gap: 16px;
+    }
+
+    /* ─── Header ─── */
+    .header {
+      padding: 0 40px; height: 64px;
+      border-bottom: 1px solid var(--gb);
+      background: rgba(1,14,14,0.85);
+      backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+      position: sticky; top: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* ─── Logo ─── */
+    .logo-wrap {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+    }
+    .logo-ico {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--t5) 0%, var(--t6) 100%);
+      border: 1px solid rgba(243,232,188,0.2);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 12px rgba(3,83,82,0.6);
+    }
+
+    /* ─── Sidebar ─── */
+    .sidebar { flex: 0 0 390px; position: sticky; top: 88px; align-self: flex-start; }
+
+    /* ─── Progress Bar ─── */
+    .prog-bar {
+      height: 3px; border-radius: 2px;
+      background: linear-gradient(90deg, var(--t3), var(--y));
+      animation: progAnim 2s ease-in-out infinite alternate;
+    }
+    @keyframes progAnim { from{opacity:.5;transform:scaleX(.7)} to{opacity:1;transform:scaleX(1)} }
+    .prog-wrap { background: rgba(243,232,188,0.08); border-radius: 2px; overflow: hidden; }
+
+    /* ─── Hackathon ribbon ─── */
+    .hack-badge {
+      position: fixed; top: 52px; right: -32px; z-index: 300;
+      background: linear-gradient(135deg, #F3E8BC, #e8d9a0);
+      color: #035352; font-size: 9.5px; font-weight: 800;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 6px 44px; transform: rotate(45deg);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
   `}</style>
 );
 
-/* ── Icons ── */
-const MedCrossIcon = () => (
-  <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
-    <rect x="1" y="1" width="50" height="50" rx="14" stroke="rgba(243,232,188,0.15)" strokeWidth="1.5"/>
-    <rect x="20" y="10" width="12" height="32" rx="4" fill="rgba(243,232,188,0.12)"/>
-    <rect x="10" y="20" width="32" height="12" rx="4" fill="rgba(243,232,188,0.12)"/>
+/* ══════════════ SVG ICONS ══════════════ */
+const LogoSVG = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
+    <rect x="22" y="8" width="20" height="48" rx="8" fill="#F3E8BC"/>
+    <rect x="8" y="22" width="48" height="20" rx="8" fill="#F3E8BC"/>
+    <circle cx="32" cy="32" r="9" fill="#035352"/>
   </svg>
 );
 
-const CheckSvg = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+const CheckIco = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12"/>
   </svg>
 );
 
-const SpinnerSvg = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{animation:'spin 0.9s linear infinite'}}>
+const SpinIco = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+    style={{animation:'rotate .75s linear infinite'}}>
     <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/>
     <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
     <line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/>
@@ -367,164 +346,279 @@ const SpinnerSvg = () => (
   </svg>
 );
 
-const AlertSvg = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e05252" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+const AlertIco = ({ color = '#f87171' }) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,marginTop:1}}>
     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
     <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
   </svg>
 );
 
-const FileSvg = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(243,232,188,0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+const FileIco = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(243,232,188,0.35)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,marginTop:2}}>
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
     <polyline points="14 2 14 8 20 8"/>
     <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
   </svg>
 );
 
-const ArrowSvg = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-  </svg>
-);
-
-const BrainSvg = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(243,232,188,0.5)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+const BrainIco = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(243,232,188,0.45)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}>
     <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-1.04-4.69A2 2 0 0 1 4 12a2 2 0 0 1 2-2 2.5 2.5 0 0 1 3.5-3.5z"/>
     <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 1.04-4.69A2 2 0 0 0 20 12a2 2 0 0 0-2-2 2.5 2.5 0 0 0-3.5-3.5z"/>
   </svg>
 );
 
-/* ── Main App ── */
+const ArrowIco = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+  </svg>
+);
+
+const ShieldIco = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(243,232,188,0.45)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  </svg>
+);
+
+const GridIco = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(243,232,188,0.45)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}>
+    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+  </svg>
+);
+
+/* ══════════════ EMPTY STATE ══════════════ */
+const EmptyState = () => (
+  <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:520,gap:24,textAlign:'center',padding:40}}>
+    <div style={{
+      width:96,height:96,borderRadius:24,
+      background:'linear-gradient(135deg,rgba(3,83,82,0.5),rgba(4,106,105,0.3))',
+      border:'1px solid rgba(243,232,188,0.1)',
+      display:'flex',alignItems:'center',justifyContent:'center',
+      boxShadow:'0 0 48px rgba(3,83,82,0.4)',
+    }}>
+      <LogoSVG size={44} />
+    </div>
+    <div>
+      <div style={{fontSize:20,fontFamily:'DM Serif Display,serif',color:'rgba(243,232,188,0.55)',marginBottom:8}}>
+        Awaiting Clinical Case
+      </div>
+      <div style={{fontSize:13,color:'rgba(243,232,188,0.25)',maxWidth:300,lineHeight:1.7}}>
+        Enter patient demographics and symptoms in the form to generate an AI-powered clinical assessment.
+      </div>
+    </div>
+    <div style={{display:'flex',gap:12,flexWrap:'wrap',justifyContent:'center'}}>
+      {['Demographics','Symptom Analysis','RAG Citations'].map(t=>(
+        <div key={t} className="pill pill-teal">{t}</div>
+      ))}
+    </div>
+  </div>
+);
+
+/* ══════════════ LOADING PANEL ══════════════ */
+const LoadingPanel = ({ step, steps }) => (
+  <div className="card" style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:520}}>
+    <div style={{width:'100%',maxWidth:400}}>
+      <div style={{textAlign:'center',marginBottom:40}}>
+        <div style={{
+          width:72,height:72,borderRadius:20,
+          background:'linear-gradient(135deg,rgba(3,83,82,0.6),rgba(4,106,105,0.4))',
+          border:'1px solid rgba(243,232,188,0.15)',
+          display:'flex',alignItems:'center',justifyContent:'center',
+          margin:'0 auto 20px',
+          boxShadow:'0 0 40px rgba(3,83,82,0.5)',
+          animation:'stepglow 1.4s ease-in-out infinite',
+        }}>
+          <LogoSVG size={32} />
+        </div>
+        <div style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:'rgba(243,232,188,0.4)',marginBottom:6}}>
+          Azure AI Foundry
+        </div>
+        <h2 style={{margin:0,fontSize:22}}>Agent Processing</h2>
+      </div>
+
+      {/* Progress bar */}
+      <div className="prog-wrap" style={{marginBottom:36}}>
+        <div className="prog-bar" style={{width:`${Math.round(((step+1)/steps.length)*100)}%`}} />
+      </div>
+
+      <div>
+        {steps.map((s, i) => {
+          const isDone = i < step;
+          const isAct  = i === step;
+          return (
+            <div key={i} className="step" style={{opacity: i > step ? 0.35 : 1, transition:'opacity .4s'}}>
+              <div className={`step-ico ${isDone?'done':isAct?'active':'pend'}`}>
+                {isDone ? <CheckIco /> : isAct ? <SpinIco /> : <span style={{fontSize:11}}>{i+1}</span>}
+              </div>
+              <div style={{
+                fontSize:13.5, lineHeight:1.4,
+                fontWeight: isAct ? 600 : 400,
+                color: isDone ? 'rgba(243,232,188,0.6)' : isAct ? 'var(--y)' : 'rgba(243,232,188,0.3)',
+              }}>
+                {s}
+              </div>
+              {isAct && (
+                <div className="pill pill-yellow" style={{marginLeft:'auto',fontSize:9.5}}>Running</div>
+              )}
+              {isDone && (
+                <div style={{marginLeft:'auto',color:'var(--green)',fontSize:11}}>✓</div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+);
+
+/* ══════════════ MAIN APP ══════════════ */
 export default function App() {
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     age: '', gender: '', location: '', symptoms: '',
     resources: { lab: false, imaging: false, iv: false, specialist: false }
   });
-  const [status, setStatus] = useState('idle'); // idle | analyzing | success
-  const [loadingStep, setLoadingStep] = useState(0);
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
+  const [status, setStatus]       = useState('idle');
+  const [loadStep, setLoadStep]   = useState(0);
+  const [result, setResult]       = useState(null);
+  const [error, setError]         = useState(null);
+  const [caseCount, setCaseCount] = useState(0);
   const resultsRef = useRef(null);
 
-  const analysisSteps = [
+  const STEPS = [
     'Validating patient demographics',
-    'Parsing symptom presentation',
-    'Cross-referencing clinical guidelines',
+    'Parsing clinical symptom presentation',
+    'Cross-referencing WHO & CDC guidelines',
     'Formulating differential diagnosis',
-    'Generating resource-adapted plan',
+    'Generating resource-adapted protocol',
   ];
 
+  /* animate steps while loading */
   useEffect(() => {
-    if (status === 'analyzing') {
-      let i = 0;
-      const iv = setInterval(() => {
-        i++;
-        if (i < analysisSteps.length) setLoadingStep(i);
-        else clearInterval(iv);
-      }, 900);
-      return () => clearInterval(iv);
-    }
+    if (status !== 'analyzing') return;
+    let i = 0;
+    const iv = setInterval(() => { i++; if (i < STEPS.length) setLoadStep(i); else clearInterval(iv); }, 950);
+    return () => clearInterval(iv);
   }, [status]);
 
+  /* scroll to results */
   useEffect(() => {
     if (status === 'success' && resultsRef.current) {
-      resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => resultsRef.current.scrollIntoView({ behavior:'smooth', block:'start' }), 100);
     }
   }, [status]);
 
-  const handleInput = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-  const handleCheck = e => setFormData({ ...formData, resources: { ...formData.resources, [e.target.name]: e.target.checked } });
+  const setField  = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const setCheck  = e => setForm({ ...form, resources: { ...form.resources, [e.target.name]: e.target.checked } });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.symptoms) return;
-    setStatus('analyzing');
-    setLoadingStep(0);
-    setResult(null);
-    setError(null);
+    if (!form.symptoms.trim()) return;
+    setStatus('analyzing'); setLoadStep(0); setResult(null); setError(null);
     try {
       const res = await fetch('https://literate-space-giggle-g4vq4v4xp7xrfp74r-8000.app.github.dev/api/diagnose', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          age: formData.age, gender: formData.gender,
-          location: formData.location, symptoms: formData.symptoms,
-          resources: formData.resources
+          age: form.age, gender: form.gender, location: form.location,
+          symptoms: form.symptoms, resources: form.resources
         })
       });
       const data = await res.json();
       setResult(data);
       setStatus('success');
-    } catch (err) {
-      setError('Failed to connect to agent. Please ensure the backend is running.');
+      setCaseCount(n => n + 1);
+    } catch {
+      setError('Unable to reach the MediGuide AI agent. Check that the backend is running and accessible.');
       setStatus('idle');
     }
   };
 
-  const isAnalyzing = status === 'analyzing';
-  const isSuccess   = status === 'success';
+  const reset = () => {
+    setStatus('idle'); setResult(null); setError(null);
+    setForm({ age:'', gender:'', location:'', symptoms:'', resources:{lab:false,imaging:false,iv:false,specialist:false} });
+  };
+
+  const busy = status === 'analyzing';
 
   return (
     <>
-      <GlobalStyles />
+      <CSS />
 
-      {/* Top Banner */}
-      <div className="top-banner">
-        🏥 &nbsp; Microsoft Agents League Hackathon 2026 &nbsp; · &nbsp; Built with Azure AI Foundry
+      {/* Hackathon ribbon */}
+      <div className="hack-badge">Hackathon 2026</div>
+
+      {/* ── Top announcement bar ── */}
+      <div className="topbar">
+        <div style={{display:'flex',alignItems:'center',gap:8}}>
+          <span style={{fontSize:14}}>🏆</span>
+          <span style={{fontSize:11,fontWeight:700,letterSpacing:'0.08em',textTransform:'uppercase',color:'rgba(243,232,188,0.55)'}}>
+            Microsoft Agents League Hackathon 2026
+          </span>
+        </div>
+        <div style={{width:1,height:14,background:'rgba(243,232,188,0.15)'}}/>
+        <div style={{display:'flex',alignItems:'center',gap:6}}>
+          <span style={{fontSize:11,color:'rgba(243,232,188,0.35)'}}>Built on</span>
+          <span className="pill pill-teal">Azure AI Foundry</span>
+        </div>
+        <div style={{width:1,height:14,background:'rgba(243,232,188,0.15)'}}/>
+        <div style={{fontSize:11,color:'rgba(243,232,188,0.35)'}}>by <span style={{color:'rgba(243,232,188,0.6)',fontWeight:600}}>Poovarasu S</span> · KIOT</div>
       </div>
 
-      {/* Header */}
-      <header className="site-header">
-        <div style={{ maxWidth: 1320, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{
-              width: 40, height: 40, borderRadius: 10,
-              background: 'linear-gradient(135deg, #035352, #058584)',
-              border: '1px solid rgba(243,232,188,0.2)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-            }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F3E8BC" strokeWidth="2.2" strokeLinecap="round">
-                <path d="M12 2v20M2 12h20"/>
-              </svg>
-            </div>
-            <div>
-              <h1 style={{ fontSize: 22, lineHeight: 1 }}>MediGuide AI</h1>
-              <div style={{ fontSize: 11, color: 'rgba(243,232,188,0.45)', marginTop: 3, fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                Clinical Decision Support
-              </div>
+      {/* ── Header ── */}
+      <header className="header">
+        {/* Logo */}
+        <a className="logo-wrap" href="#" onClick={e=>e.preventDefault()}>
+          <div className="logo-ico"><LogoSVG size={20} /></div>
+          <div>
+            <div style={{fontSize:17,fontFamily:'DM Serif Display,serif',color:'var(--y)',lineHeight:1}}>MediGuide AI</div>
+            <div style={{fontSize:10,color:'rgba(243,232,188,0.38)',fontWeight:600,letterSpacing:'0.07em',textTransform:'uppercase',marginTop:2}}>
+              Clinical Decision Support
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div className="pulse-dot" />
-            <span style={{ fontSize: 12, color: 'rgba(243,232,188,0.45)', fontWeight: 500 }}>Agent Online</span>
+        </a>
+
+        {/* Header right */}
+        <div style={{display:'flex',alignItems:'center',gap:16}}>
+          {caseCount > 0 && (
+            <div style={{display:'flex',alignItems:'center',gap:7,fontSize:12,color:'rgba(243,232,188,0.4)'}}>
+              <GridIco />
+              <span>{caseCount} case{caseCount>1?'s':''} analyzed</span>
+            </div>
+          )}
+          <div style={{width:1,height:20,background:'rgba(243,232,188,0.1)'}}/>
+          <div style={{display:'flex',alignItems:'center',gap:7}}>
+            <div className="pdot"/>
+            <span style={{fontSize:12,color:'rgba(243,232,188,0.4)',fontWeight:500}}>Agent Online</span>
           </div>
         </div>
       </header>
 
-      {/* Main layout */}
-      <main style={{ maxWidth: 1320, margin: '0 auto', padding: '36px 40px', display: 'flex', gap: 28, alignItems: 'flex-start' }}>
+      {/* ── Body ── */}
+      <main style={{flex:1,display:'flex',gap:28,padding:'32px 40px',maxWidth:1360,margin:'0 auto',width:'100%',alignItems:'flex-start'}}>
 
-        {/* ── LEFT PANEL: Form ── */}
-        <aside style={{ flex: '0 0 380px', position: 'sticky', top: 92 }}>
-          <div className="card">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 22 }}>
-              <h2 style={{ margin: 0, fontSize: 18 }}>Patient Case</h2>
-              <div className="tag">New</div>
+        {/* ════════ SIDEBAR / FORM ════════ */}
+        <aside className="sidebar">
+
+          {/* Form card */}
+          <div className="card" style={{marginBottom:16}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:22}}>
+              <h2 style={{margin:0,fontSize:18}}>Patient Case</h2>
+              <div className="pill pill-yellow">New</div>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:16}}>
 
               {/* Age + Gender */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
                 <div>
-                  <label className="label">Age</label>
-                  <input type="number" name="age" value={formData.age} onChange={handleInput}
-                    placeholder="yrs" className="input-field" min="0" max="120" />
+                  <label className="lbl">Age</label>
+                  <input type="number" name="age" value={form.age} onChange={setField}
+                    placeholder="yrs" className="inp" min="0" max="120" />
                 </div>
                 <div>
-                  <label className="label">Gender</label>
-                  <select name="gender" value={formData.gender} onChange={handleInput} className="input-field" style={{ appearance: 'none' }}>
+                  <label className="lbl">Gender</label>
+                  <select name="gender" value={form.gender} onChange={setField} className="inp">
                     <option value="" disabled>Select</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
@@ -535,33 +629,32 @@ export default function App() {
 
               {/* Location */}
               <div>
-                <label className="label">Facility / Location</label>
-                <input type="text" name="location" value={formData.location} onChange={handleInput}
-                  placeholder="e.g. Rural Clinic, Ward B" className="input-field" />
+                <label className="lbl">Facility / Location</label>
+                <input type="text" name="location" value={form.location} onChange={setField}
+                  placeholder="e.g. Rural Clinic, Ward B, KIOT Hospital" className="inp" />
               </div>
 
               {/* Symptoms */}
               <div>
-                <label className="label">Clinical Presentation</label>
-                <textarea name="symptoms" value={formData.symptoms} onChange={handleInput}
-                  placeholder="Chief complaint, onset, duration, associated symptoms..."
-                  className="input-field" required
-                  style={{ minHeight: 148, resize: 'vertical', lineHeight: 1.65 }} />
+                <label className="lbl">Clinical Presentation</label>
+                <textarea name="symptoms" value={form.symptoms} onChange={setField}
+                  placeholder="Chief complaint, onset, duration, associated symptoms, vitals…"
+                  className="inp" required />
               </div>
 
               {/* Resources */}
               <div>
-                <label className="label" style={{ marginBottom: 10 }}>Available Resources</label>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <label className="lbl" style={{marginBottom:10}}>Available Resources</label>
+                <div style={{display:'flex',flexDirection:'column',gap:8}}>
                   {[
-                    ['lab',       '🧪', 'Basic Laboratory (CBC, CMP)'],
-                    ['imaging',   '🔬', 'Diagnostic Imaging (X-Ray / US)'],
-                    ['iv',        '💉', 'Intravenous Access & Fluids'],
-                    ['specialist','📡', 'Specialist Tele-consultation'],
-                  ].map(([name, icon, label]) => (
-                    <label key={name} className="check-row">
-                      <input type="checkbox" name={name} checked={formData.resources[name]} onChange={handleCheck} />
-                      <span style={{ fontSize: 15 }}>{icon}</span>
+                    ['lab','🧪','Basic Lab (CBC / CMP)'],
+                    ['imaging','🔬','Imaging (X-Ray / Ultrasound)'],
+                    ['iv','💉','IV Access & Fluids'],
+                    ['specialist','📡','Specialist Tele-consult'],
+                  ].map(([name,ico,label])=>(
+                    <label key={name} className="chk">
+                      <input type="checkbox" name={name} checked={form.resources[name]} onChange={setCheck}/>
+                      <span className="chk-icon">{ico}</span>
                       <span>{label}</span>
                     </label>
                   ))}
@@ -570,175 +663,174 @@ export default function App() {
 
               {/* Error */}
               {error && (
-                <div style={{
-                  background: 'rgba(224,82,82,0.1)', border: '1px solid rgba(224,82,82,0.35)',
-                  borderRadius: 8, padding: '12px 14px', fontSize: 13, color: '#f08080',
-                  display: 'flex', gap: 10, alignItems: 'flex-start'
-                }}>
-                  <AlertSvg />
+                <div className="err-banner">
+                  <AlertIco />
                   <span>{error}</span>
                 </div>
               )}
 
+              <div style={{height:4}}/>
+
               {/* Submit */}
-              <button type="submit" className="btn-primary" disabled={!formData.symptoms || isAnalyzing}>
-                {isAnalyzing ? (
-                  <><div className="spinner" /> Processing Assessment...</>
-                ) : (
-                  <>Run Clinical Assessment &nbsp;<ArrowSvg /></>
-                )}
+              <button type="submit" className="btn btn-cta" disabled={!form.symptoms.trim()||busy}>
+                {busy
+                  ? <><div className="spin"/>Processing Assessment…</>
+                  : <>Run Clinical Assessment &nbsp;<ArrowIco/></>
+                }
               </button>
+
+              {/* Reset when done */}
+              {status==='success' && (
+                <button type="button" className="btn btn-ghost" style={{width:'100%'}} onClick={reset}>
+                  ← New Assessment
+                </button>
+              )}
             </form>
           </div>
 
-          {/* Disclaimer */}
-          <p style={{ fontSize: 11, color: 'rgba(243,232,188,0.28)', marginTop: 14, lineHeight: 1.6, textAlign: 'center', padding: '0 4px' }}>
-            For clinical decision support only. Always apply professional medical judgement. Not a substitute for direct patient care.
-          </p>
+          {/* Info card */}
+          <div className="card-dark" style={{padding:20}}>
+            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}>
+              <ShieldIco/>
+              <span style={{fontSize:11,fontWeight:700,letterSpacing:'0.08em',textTransform:'uppercase',color:'rgba(243,232,188,0.4)'}}>
+                Clinical Notice
+              </span>
+            </div>
+            <p style={{fontSize:12,color:'rgba(243,232,188,0.3)',lineHeight:1.7,margin:0}}>
+              For decision support only. Always apply professional medical judgement.
+              Not a substitute for direct patient care or specialist consultation.
+            </p>
+          </div>
         </aside>
 
-        {/* ── RIGHT PANEL: Results ── */}
-        <section style={{ flex: 1 }} ref={resultsRef}>
+        {/* ════════ RESULTS PANEL ════════ */}
+        <section style={{flex:1}} ref={resultsRef}>
 
           {/* IDLE */}
-          {status === 'idle' && !error && (
-            <div className="empty-state">
-              <MedCrossIcon />
-              <div>
-                <div style={{ fontSize: 17, fontWeight: 500, color: 'rgba(243,232,188,0.5)', marginBottom: 6 }}>
-                  Awaiting Patient Case
-                </div>
-                <div style={{ fontSize: 13, color: 'rgba(243,232,188,0.28)', maxWidth: 280 }}>
-                  Complete the form on the left to generate an AI-powered clinical assessment.
-                </div>
-              </div>
-            </div>
-          )}
+          {status==='idle' && <EmptyState />}
 
           {/* ANALYZING */}
-          {isAnalyzing && (
-            <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 480 }}>
-              <div style={{ width: '100%', maxWidth: 380 }}>
-                <div style={{ textAlign: 'center', marginBottom: 36 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(243,232,188,0.4)', marginBottom: 8 }}>
-                    Agent Reasoning
-                  </div>
-                  <h2 style={{ margin: 0, fontSize: 22 }}>Running Assessment Protocol</h2>
-                </div>
-
-                <div>
-                  {analysisSteps.map((step, idx) => {
-                    const isDone   = idx < loadingStep;
-                    const isActive = idx === loadingStep;
-                    const isPending = idx > loadingStep;
-                    return (
-                      <div key={idx} className="step-item" style={{ opacity: isPending ? 0.38 : 1 }}>
-                        <div className={`step-icon ${isDone ? 'done' : isActive ? 'active' : 'pending'}`}>
-                          {isDone ? <CheckSvg /> : isActive ? <SpinnerSvg /> : <span style={{ fontSize: 11 }}>{idx + 1}</span>}
-                        </div>
-                        <div style={{ fontSize: 14, fontWeight: isActive ? 600 : 400, color: isActive ? 'var(--yellow)' : 'rgba(243,232,188,0.6)' }}>
-                          {step}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
+          {status==='analyzing' && <LoadingPanel step={loadStep} steps={STEPS}/>}
 
           {/* SUCCESS */}
-          {isSuccess && result && (
-            <div>
+          {status==='success' && result && (
+            <div style={{animation:'slideUp .45s ease-out'}}>
+
+              {/* ── Top metrics row ── */}
+              <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:14,marginBottom:22}}>
+                <div className="metric">
+                  <div className="metric-val">✓</div>
+                  <div className="metric-lbl">Assessment Complete</div>
+                </div>
+                <div className="metric">
+                  <div className="metric-val" style={{fontSize:20}}>
+                    {Array.isArray(result.reasoning_steps) ? result.reasoning_steps.length : '—'}
+                  </div>
+                  <div className="metric-lbl">Reasoning Steps</div>
+                </div>
+                <div className="metric">
+                  <div className="metric-val" style={{fontSize:20}}>
+                    {Array.isArray(result.citations) ? result.citations.length : '—'}
+                  </div>
+                  <div className="metric-lbl">Citations</div>
+                </div>
+              </div>
 
               {/* ── Clinical Assessment ── */}
-              <div className="card anim-up" style={{ marginBottom: 22 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(78,204,163,0.15)', border: '1px solid rgba(78,204,163,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ecca3" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <div className="card au" style={{marginBottom:18}}>
+                <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:18}}>
+                  <div style={{
+                    width:34,height:34,borderRadius:9,
+                    background:'rgba(61,214,140,0.1)',border:'1px solid rgba(61,214,140,0.25)',
+                    display:'flex',alignItems:'center',justifyContent:'center',
+                  }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3dd68c" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
                   </div>
-                  <h2 style={{ margin: 0 }}>Clinical Assessment</h2>
+                  <h2 style={{margin:0}}>Clinical Assessment</h2>
+                  <div className="pill pill-green" style={{marginLeft:'auto'}}>AI Generated</div>
                 </div>
-                <div className="result-block accent" style={{ marginBottom: 0, fontSize: 14.5, lineHeight: 1.8, whiteSpace: 'pre-wrap', color: 'var(--yellow)' }}>
+                <div className="rb yl" style={{marginBottom:0,fontSize:14.5,lineHeight:1.85,whiteSpace:'pre-wrap',color:'var(--y)'}}>
                   {result.response}
                 </div>
               </div>
 
               {/* ── Reasoning Steps ── */}
               {Array.isArray(result.reasoning_steps) && result.reasoning_steps.length > 0 && (
-                <div className="card anim-up anim-up-1" style={{ marginBottom: 22 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18 }}>
-                    <BrainSvg />
-                    <h2 style={{ margin: 0 }}>Agent Reasoning Chain</h2>
-                    <div className="tag" style={{ marginLeft: 'auto' }}>{result.reasoning_steps.length} steps</div>
+                <div className="card au au1" style={{marginBottom:18}}>
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:18}}>
+                    <BrainIco/>
+                    <h2 style={{margin:0}}>Agent Reasoning Chain</h2>
+                    <div className="pill pill-teal" style={{marginLeft:'auto'}}>{result.reasoning_steps.length} steps</div>
                   </div>
-                  <div>
-                    {result.reasoning_steps.map((step, idx) => (
-                      <div key={idx} style={{ display: 'flex', gap: 14, padding: '12px 0', borderBottom: '1px solid rgba(243,232,188,0.07)' }}
-                        className={idx === result.reasoning_steps.length - 1 ? '' : ''}>
-                        <div className="num-badge">{idx + 1}</div>
-                        <div style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(243,232,188,0.8)', paddingTop: 2 }}>
-                          {typeof step === 'object' ? (step.content || step.step || JSON.stringify(step)) : step}
-                        </div>
+                  {result.reasoning_steps.map((s,i)=>(
+                    <div key={i} style={{display:'flex',gap:14,padding:'13px 0',borderBottom:'1px solid rgba(243,232,188,0.07)'}}>
+                      <div className="nbadge">{i+1}</div>
+                      <div style={{fontSize:13.5,lineHeight:1.7,color:'rgba(243,232,188,0.75)',paddingTop:2}}>
+                        {typeof s==='object'?(s.content||s.step||JSON.stringify(s)):s}
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               )}
 
               {/* ── Citations ── */}
               {Array.isArray(result.citations) && result.citations.length > 0 && (
-                <div className="card anim-up anim-up-2">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                    <FileSvg />
-                    <h2 style={{ margin: 0 }}>Evidence Citations</h2>
-                    <div className="tag" style={{ marginLeft: 'auto' }}>{result.citations.length} sources</div>
+                <div className="card au au2">
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:6}}>
+                    <FileIco/>
+                    <h2 style={{margin:0}}>Evidence Citations</h2>
+                    <div className="pill pill-yellow" style={{marginLeft:'auto'}}>{result.citations.length} sources</div>
                   </div>
-                  <div>
-                    {result.citations.map((c, i) => (
-                      <div key={i} className="citation-item">
-                        <div style={{
-                          width: 28, height: 28, borderRadius: 6,
-                          background: 'rgba(243,232,188,0.08)',
-                          border: '1px solid rgba(243,232,188,0.15)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                          fontSize: 11, fontWeight: 700, color: 'var(--yellow-muted)'
-                        }}>
-                          {i + 1}
-                        </div>
-                        <div>
-                          {typeof c === 'string' ? (
-                            <div style={{ fontSize: 13, color: 'var(--yellow)', lineHeight: 1.5 }}>{c}</div>
-                          ) : (
-                            <>
-                              {c.id    && <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--yellow-muted)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 3 }}>{c.id}</div>}
-                              {c.title && <div style={{ fontSize: 13, color: 'var(--yellow)', lineHeight: 1.5 }}>{c.title}</div>}
-                              {c.url   && <a href={c.url} target="_blank" rel="noreferrer" style={{ fontSize: 12, color: 'var(--teal-400)', textDecoration: 'none', marginTop: 4, display: 'inline-block' }}>{c.url}</a>}
-                              {c.snippet && <div style={{ fontSize: 12, color: 'rgba(243,232,188,0.4)', marginTop: 5, lineHeight: 1.6 }}>{c.snippet}</div>}
-                              {!c.id && !c.title && <div style={{ fontSize: 13, color: 'var(--yellow)' }}>{JSON.stringify(c)}</div>}
+                  {result.citations.map((c,i)=>(
+                    <div key={i} className="cit">
+                      <div className="cit-num">{i+1}</div>
+                      <div style={{flex:1}}>
+                        {typeof c==='string'
+                          ? <div style={{fontSize:13,color:'var(--y)',lineHeight:1.6}}>{c}</div>
+                          : <>
+                              {c.id    && <div style={{fontSize:10.5,fontWeight:800,letterSpacing:'0.08em',textTransform:'uppercase',color:'var(--ym)',marginBottom:4}}>{c.id}</div>}
+                              {c.title && <div style={{fontSize:13.5,color:'var(--y)',lineHeight:1.55,fontWeight:500}}>{c.title}</div>}
+                              {c.url   && <a href={c.url} target="_blank" rel="noreferrer"
+                                style={{display:'inline-block',marginTop:5,fontSize:11.5,color:'var(--t2)',textDecoration:'none'}}>
+                                ↗ {c.url}
+                              </a>}
+                              {c.snippet && <div style={{fontSize:12,color:'rgba(243,232,188,0.35)',marginTop:6,lineHeight:1.65}}>{c.snippet}</div>}
+                              {!c.id&&!c.title&&<div style={{fontSize:13,color:'var(--y)'}}>{JSON.stringify(c)}</div>}
                             </>
-                          )}
-                        </div>
+                        }
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               )}
 
-              {/* Re-assess button */}
-              <div className="anim-up anim-up-3" style={{ marginTop: 20, textAlign: 'right' }}>
-                <button onClick={() => { setStatus('idle'); setResult(null); setFormData({ age:'', gender:'', location:'', symptoms:'', resources:{ lab:false, imaging:false, iv:false, specialist:false }}); }}
-                  style={{ background: 'transparent', border: '1px solid rgba(243,232,188,0.2)', color: 'rgba(243,232,188,0.55)', borderRadius: 8, padding: '10px 18px', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
-                  onMouseEnter={e => { e.target.style.borderColor='rgba(243,232,188,0.45)'; e.target.style.color='var(--yellow)'; }}
-                  onMouseLeave={e => { e.target.style.borderColor='rgba(243,232,188,0.2)'; e.target.style.color='rgba(243,232,188,0.55)'; }}>
-                  ← New Assessment
-                </button>
+              {/* ── Footer actions ── */}
+              <div className="au au3" style={{marginTop:20,display:'flex',justifyContent:'flex-end',gap:10}}>
+                <button className="btn btn-ghost" onClick={reset}>← New Assessment</button>
               </div>
-
             </div>
           )}
         </section>
       </main>
+
+      {/* ── Footer ── */}
+      <footer style={{borderTop:'1px solid var(--gb)',padding:'18px 40px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <div style={{display:'flex',alignItems:'center',gap:10}}>
+          <div className="logo-ico" style={{width:26,height:26,borderRadius:7}}>
+            <LogoSVG size={13}/>
+          </div>
+          <span style={{fontSize:12,color:'rgba(243,232,188,0.3)'}}>MediGuide AI &copy; 2026</span>
+        </div>
+        <div style={{display:'flex',gap:16,alignItems:'center'}}>
+          <span className="pill pill-teal">Azure AI Foundry</span>
+          <span style={{fontSize:11,color:'rgba(243,232,188,0.2)'}}>|</span>
+          <span style={{fontSize:12,color:'rgba(243,232,188,0.3)'}}>Built by <strong style={{color:'rgba(243,232,188,0.5)'}}>Poovarasu S</strong> · KIOT</span>
+          <span style={{fontSize:11,color:'rgba(243,232,188,0.2)'}}>|</span>
+          <span className="pill pill-yellow">🏆 Hackathon 2026</span>
+        </div>
+      </footer>
     </>
   );
 }
