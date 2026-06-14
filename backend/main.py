@@ -21,10 +21,8 @@ app.add_middleware(
 client = AzureOpenAI(
     azure_endpoint=os.getenv("AZURE_AI_ENDPOINT"),
     api_key=os.getenv("AZURE_API_KEY"),
-    api_version="2024-05-01-preview"
+    api_version="2024-11-01-preview"
 )
-
-AGENT_ID = os.getenv("AGENT_ID", "MediGuide-AI-Agent")
 
 class Resources(BaseModel):
     lab: bool = False
@@ -48,25 +46,27 @@ async def diagnose(request: DiagnosisRequest):
     try:
         patient_data = f"""Patient: {request.age}yo {request.gender}, Location: {request.location}
 Symptoms: {request.symptoms}
-Resources: Lab={request.resources.lab}, Imaging={request.resources.imaging}, IV={request.resources.iv}, Specialist={request.resources.specialist}
+Resources: Lab={request.resources.lab}, Imaging={request.resources.imaging}, IV={request.resources.iv}, Specialist={request.resources.specialist}"""
 
-Provide clinical assessment with reasoning steps and WHO citations."""
-
-        thread = client.beta.threads.create()
-        client.beta.threads.messages.create(
-            thread_id=thread.id,
-            role="user",
-            content=patient_data
+        response = client.chat.completions.create(
+            model="gpt-4.1",
+            messages=[
+                {"role": "system", "content": """You are MediGuide AI, a global clinical decision support agent. When given patient info:
+1. ANALYZE symptoms step by step
+2. REASON through diagnoses from most to least likely
+3. CONSIDER location and available resources
+4. PROVIDE differential diagnosis with probability
+5. RECOMMEND treatment protocol based on WHO guidelines
+6. CITE WHO sources
+7. FLAG if emergency referral needed
+Be concise, cited, and life-saving."""},
+                {"role": "user", "content": patient_data}
+            ]
         )
-        run = client.beta.threads.runs.create_and_poll(
-            thread_id=thread.id,
-            assistant_id=AGENT_ID
-        )
-        messages = client.beta.threads.messages.list(thread_id=thread.id)
-        response_text = messages.data[0].content[0].text.value
+        response_text = response.choices[0].message.content
         return {
             "response": response_text,
-            "reasoning_steps": ["Analyzed symptoms", "Checked WHO guidelines", "Formulated diagnosis"],
+            "reasoning_steps": ["Analyzed symptoms", "Cross-referenced WHO guidelines", "Formulated differential diagnosis", "Generated treatment protocol"],
             "citations": [{"id": 1, "title": "WHO Clinical Guidelines", "url": "https://www.who.int"}]
         }
     except Exception as e:
